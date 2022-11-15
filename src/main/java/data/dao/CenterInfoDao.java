@@ -14,11 +14,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import data.dto.CenterInfo;
 
 public class CenterInfoDao {
 	Connection conn = null;
@@ -54,16 +59,16 @@ public class CenterInfoDao {
 			e.printStackTrace();
 		}
 	}
-	
-	public static String getCenterInfo() { //json ��ȯ �޼ҵ�
+
+	public static String getCenterInfo() { 
 		String jsonStr = "";
-		
+
 		try {
 			StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063299/v1/uddi:48b1c29e-76a6-47bd-a998-fedccaf1d092");
 			urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
 			urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8"));
 
-			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=����Ű"); //����Ű�� ���ʿ� ��������
+			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=QzILSVlkcA7ltIv2%2B4YDPMKcSNxncfi9xa%2B7lfD6DJub%2B1H%2BuvCeEgDMoq8E4obYtACKt2cP%2BEFXelSm996NOQ%3D%3D"); //����Ű�� ���ʿ� ��������
 
 			URL url = new URL(urlBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -93,5 +98,73 @@ public class CenterInfoDao {
 		} /*Service Key*/
 
 		return jsonStr;
+	}
+
+	public ArrayList<CenterInfo> parsingList() {
+
+		String jsonCenter = getCenterInfo();
+		ArrayList<CenterInfo> centerInfoList = null;
+
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject)jsonParser.parse(jsonCenter);
+			JSONArray jsonArr = (JSONArray) jsonObject.get("data");
+			centerInfoList = new ArrayList<CenterInfo>();
+
+			for(int i =0; i<jsonArr.size(); i++) {
+				JSONObject dataObj = (JSONObject) jsonArr.get(i);
+				String facNameList = (String) dataObj.get("주요시설");
+				String[] array = facNameList.split("\\+");
+				for(int j = 0; j<array.length; j++) {
+					CenterInfo centerInfo = new CenterInfo();
+					centerInfo.ct_name = (String) dataObj.get("명칭");
+					centerInfo.ct_tel = (String) dataObj.get("문의처");
+					centerInfo.ct_address = (String) dataObj.get("주소");
+					centerInfo.ct_facName = array[j];
+
+					centerInfoList.add(centerInfo);
+					System.out.println("list추가");
+				}
+
+			}
+
+
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return centerInfoList;
+	}
+
+	
+
+	public void insertCenterInfo(CenterInfo ci) {
+		// 연결 부분
+
+
+		String sqlQuery = "INSERT INTO p_centerinfo VALUES(CONCAT('CT', centerinfoSEQ.nextVal), ?, ?, ?, ?, ?)";
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(sqlQuery);
+			psmt.setString(1, ci.ct_name);
+			psmt.setString(2, ci.ct_facName);
+			psmt.setString(3, ci.ct_facKind);
+			psmt.setString(4, ci.ct_address);
+			psmt.setString(5, ci.ct_tel);
+
+			int resultCnt = psmt.executeUpdate(); // executeQuery -> Select -> ResultSet
+			// executeUpdate -> insert, delete, update -> int
+			System.out.println(resultCnt);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
 	}
 }
