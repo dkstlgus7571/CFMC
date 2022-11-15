@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,24 +18,41 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ClassInfoDao {
+	Connection conn = null;
+	PreparedStatement psmt = null;
+	ResultSet rs = null;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String jsonClass = getClassInfo();
 
+	public void connect() throws Exception{ //DB 연결
+		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; 
+		String db_id = "scott";
+		String db_pw = "tiger";
+
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+
+		if(conn != null) { 
+			conn.close();
+		}
+		conn = DriverManager.getConnection(db_url, db_id, db_pw);
+	}
+
+	public void disConnect() {	//DB 연결 해제
 		try {
-			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject)jsonParser.parse(jsonClass);
-			JSONArray jsonArr = (JSONArray) jsonObject.get("data");
-			for(int i =0; i<jsonArr.size(); i++) {
-				JSONObject dataObj = (JSONObject) jsonArr.get(i);
-			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			if(rs != null) {
+				rs.close(); }
+
+			if(psmt != null) {
+				psmt.close(); }
+
+			if(conn != null) {
+				conn.close();}
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	public static String getClassInfo() {
+
+	public static String getClassInfo() { //json 반환 메소드
 		String jsonStr = "";
 		try {
 			StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063301/v1/uddi:074c8870-e68b-4174-8ebf-900c95e802b1"); 
@@ -68,4 +90,11 @@ public class ClassInfoDao {
 
 		return jsonStr;
 	}
+
+
+
+
+
+
+
 }
