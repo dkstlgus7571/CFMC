@@ -1,7 +1,7 @@
 package data.dto;
 
 public class CenterInfo { 
-	public int ct_code; 
+	public String ct_code; 
 	public String ct_name; 
 	public String ct_facName; 
 	public String ct_facKind; 

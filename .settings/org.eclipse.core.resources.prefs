@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/data/dao/ClassInfoDao.java=UTF-8
 encoding//src/main/java/data/dto/CenterInfo.java=UTF-8
 encoding//src/main/java/data/dto/CenterRent.java=UTF-8
 encoding//src/main/java/data/dto/ClassReg.java=UTF-8

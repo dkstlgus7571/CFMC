@@ -13,21 +13,20 @@ public class OpenClassDao {
 	PreparedStatement psmt = null;
 	ResultSet rs = null;
 
-
-	public void connect() throws Exception{ //¿¬°áºÎºĞ °¡Á®¿È
-		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; //@µÚ¿¡ db¼­¹ö
+	public void connect() throws Exception{ //ì—°ê²°ë¶€ë¶„ ê°€ì ¸ì˜´
+		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; //@ë’¤ì— dbì„œë²„
 		String db_id = "scott";
 		String db_pw = "tiger";
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 
-		if(conn != null) { //ÀÌ¹Ì connection µÇ¾î ÀÖ´Â °æ¿ì ÇÑ¹ø Á¾·á½ÃÄÑÁÖ±â
+		if(conn != null) { //ì´ë¯¸ connection ë˜ì–´ ìˆëŠ” ê²½ìš° í•œë²ˆ ì¢…ë£Œì‹œì¼œì£¼ê¸°
 			conn.close();
 		}
 		conn = DriverManager.getConnection(db_url, db_id, db_pw);
 	}
 
-	public void disConnect() {	//¿¬°áÇØ¼­ »ç¿ëÇß´ø db ²÷±â
+	public void disConnect() {	//ì—°ê²°í•´ì„œ ì‚¬ìš©í–ˆë˜ db ëŠê¸°
 		try {
 			if(rs != null) {
 				rs.close(); }
@@ -43,72 +42,41 @@ public class OpenClassDao {
 		}
 	}
 
-	public int selectCtCode(String locationName) { //À§Ä¡¸íÀ» ¹Ş¾Æ ½Ã¼³ ¸íÄª°ú ÀÏÄ¡ÇÒ °æ¿ì, ½Ã¼³ ÄÚµå¸¦ ¹İÈ¯ÇÏ´Â ¸Ş¼Òµå
+	public int selectCtCode(String locationName) { //ìœ„ì¹˜ëª…ì„ ë°›ì•„ ì‹œì„¤ ëª…ì¹­ê³¼ ì¼ì¹˜í•  ê²½ìš°, ì‹œì„¤ ì½”ë“œë¥¼ ë°˜í™˜í•˜ëŠ” ë©”ì†Œë“œ
 		int ctCode = 0;
-		
+
 		String sqlQuery = "SELECT * "
 				+ " FROM P_CENTERINFO "
-				+ " WHERE ½Ã¼³¸íÄª IN ( SUBSTR(?, 1, instr(?, ' ', 1, 1)-1) )"; 
-//				+ " OR ÁÖ¿ä½Ã¼³ IN ( SUBSTR(?, instr(?, ' ', 1, 1)+1, (? - instr(?, ' ', 1, 1) ) ) )";
-//		String sqlQuery = "SELECT ½Ã¼³ÄÚµå FROM P_CENTERINFO WHERE ½Ã¼³¸íÄª IN ( SUBSTR(?, 1, instr(?, ' ', 1, 1)-1) ) AND ÁÖ¿ä½Ã¼³ IN ( SUBSTR(?, instr(?, ' ', 1, 1)+1, (? - instr(?, ' ', 1, 1) ) ) )";
+				+ " WHERE ì‹œì„¤ëª…ì¹­ IN ( SUBSTR(?, 1, instr(?, ' ', 1, 1)-1) ) "
+				+ " AND ì£¼ìš”ì‹œì„¤ IN ( SUBSTR(?, instr(?, ' ', 1, 1)+1, (? - instr(?, ' ', 1, 1) ) ) )";
 
 		try {
 			connect();
 
-			psmt = conn.prepareStatement(sqlQuery); 
-			
-			//°¡´ÉÇÏ¸é ÀÚ¹Ù¿¡¼­ Àß¶ó¼­ ³Ñ±âµµ·Ï ÇØº¼°Í
+			psmt = conn.prepareStatement(sqlQuery);
+
+			//ê°€ëŠ¥í•˜ë©´ ìë°”ì—ì„œ ì˜ë¼ì„œ ë„˜ê¸°ë„ë¡ í•´ë³¼ê²ƒ
 			psmt.setString(1, locationName);
 			psmt.setString(2, locationName);
-//			psmt.setString(3, locationName);
-//			psmt.setString(4, locationName);
-//			psmt.setInt(5, locationName.length());
-//			psmt.setString(6, locationName);
-			
+			psmt.setString(3, locationName);
+			psmt.setString(4, locationName);
+			psmt.setInt(5, locationName.length());
+			psmt.setString(6, locationName);
+
 			rs = psmt.executeQuery();
-			
-			System.out.println(locationName);
-			
+
 			while (rs.next()) {
-				ctCode = rs.getInt("½Ã¼³ÄÚµå");
-			}			
+				ctCode = rs.getInt("ì‹œì„¤ì½”ë“œ");
+			}
 
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		}finally { //¿¬°áÇØ¼­ »ç¿ëÇß´ø db ²÷±â
+		}finally { //ì—°ê²°í•´ì„œ ì‚¬ìš©í–ˆë˜ db ëŠê¸°
 			disConnect();
 		}
 
-		return ctCode;		
+		return ctCode;
 
 	}
-	
-	
-	public void insertOpenClass() { 
-		//»ç¿ëÇÏ´Â ºÎºĞ		
-		String sqlQuery = "INSERT INTO P_CLASSINFO VALUES((concat('C', classInfoSEQ.nextval)), "
-				+ "'³ó±¸',"
-				+ " '³ó±¸±âÃÊ&½ÉÈ­', "
-				+ " 20,"
-				+ " '´Ü½Ã°£ ÅõÀÚ·Î Àü¹®¼º, Ã¼°è¼º,È¿À²¼º,±âÃÊÃ¼·Â,°Ç°­ÁõÁø ¹× »îÀÇ Áú Çâ»óÀ» À§ÇÑ ¿îµ¿',"
-				+ " '½Ç³»Àü¿ë ¿îµ¿È­, ¿îµ¿º¹')";
-
-		try {
-			connect();
-			psmt = conn.prepareStatement(sqlQuery); 
-		
-			int resultCnt = psmt.executeUpdate(); 
-			System.out.println(resultCnt);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally { //¿¬°áÇØ¼­ »ç¿ëÇß´ø db ²÷±â
-			disConnect();
-		}
-	}
-	
 }
