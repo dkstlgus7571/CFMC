@@ -1,6 +1,10 @@
 package data.dto;
-//�닔媛뺤떊泥��젙蹂�
+
 public class ClassReg {
-	
+	public int cr_mCode;
+	public int cr_cCode;		
+	public int cr_tCode;		
+	public int cr_ctCode;	
+	public int cr_appliDate;	
 	
 }

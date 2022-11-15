@@ -1,7 +1,9 @@
 package data.dto;
-//��愿��떊泥��젙蹂�
+
 public class CenterRent {
-	 
-	
-	
+	public int ctr_mCode;	
+	public int ctr_ctCode;	
+	public int ctr_revDate;	
+	public int ctr_appliDate;
+		
 }

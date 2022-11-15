@@ -5,17 +5,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class CenterInfoMain {
+public class ClassInfoMain {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		CenterInfoDao centerInfoDao = new CenterInfoDao();
-		String jsonCenter = centerInfoDao.getCenterInfo();
+		ClassInfoDao classInfoDao = new ClassInfoDao();		
+		String jsonClass = classInfoDao.getClassInfo();
 
 		try {
 			JSONParser jsonParser = new JSONParser();
-			JSONObject jsonObject = (JSONObject)jsonParser.parse(jsonCenter);
+			JSONObject jsonObject = (JSONObject)jsonParser.parse(jsonClass);
 			JSONArray jsonArr = (JSONArray) jsonObject.get("data");
 			for(int i =0; i<jsonArr.size(); i++) {
 				JSONObject dataObj = (JSONObject) jsonArr.get(i);
