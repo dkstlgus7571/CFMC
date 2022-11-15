@@ -52,6 +52,7 @@ public class ClassInfoDao {
 		}
 	}
 
+	
 	public static String getClassInfo() { //json 반환 메소드
 		String jsonStr = "";
 		try {
@@ -59,7 +60,7 @@ public class ClassInfoDao {
 			urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); 
 			urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); 
 
-			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=서비스키"); //서비스키를 이쪽에 넣으세요
+			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=lRcH5tJXgn%2FOTnNRRg%2FOiqY%2Fu15LN7i0pfEky1kZIxc5Ac4Gotpe%2BYc1REkGkbsOPQoAW3LN4cm0YbOrnBqd3Q%3D%3D"); //서비스키를 이쪽에 넣으세요
 
 			URL url = new URL(urlBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -83,6 +84,7 @@ public class ClassInfoDao {
 
 			System.out.println(sb.toString());
 			jsonStr = sb.toString();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
