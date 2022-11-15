@@ -1,7 +1,7 @@
 package data.dto;
 
 public class OpenCenter {
-	public  String oct_code;		
+	public String oct_ctCode;		
 	public String oct_avaPeri ;	
 	public String oct_revPeri ;	
 	public String oct_revDate;		
@@ -10,7 +10,7 @@ public class OpenCenter {
 	
 	@Override
 	public String toString() {
-		return "OpenCenter [oct_code=" + oct_code + ", oct_avaPeri=" + oct_avaPeri + ", oct_revPeri=" + oct_revPeri
+		return "OpenCenter [oct_code=" + oct_ctCode + ", oct_avaPeri=" + oct_avaPeri + ", oct_revPeri=" + oct_revPeri
 				+ ", oct_revDate=" + oct_revDate + ", oct_epi=" + oct_epi + ", oct_revAva=" + oct_revAva + "]";
 	}
 	

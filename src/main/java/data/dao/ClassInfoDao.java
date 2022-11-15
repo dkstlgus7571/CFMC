@@ -11,19 +11,21 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import data.dto.ClassInfo;
+
 public class ClassInfoDao {
 	Connection conn = null;
 	PreparedStatement psmt = null;
 	ResultSet rs = null;
 
-
-	public void connect() throws Exception{ //DB ¿¬°á
+	public void connect() throws Exception{ //DB ï¿½ï¿½ï¿½ï¿½
 		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; 
 		String db_id = "scott";
 		String db_pw = "tiger";
@@ -35,8 +37,7 @@ public class ClassInfoDao {
 		}
 		conn = DriverManager.getConnection(db_url, db_id, db_pw);
 	}
-
-	public void disConnect() {	//DB ¿¬°á ÇØÁ¦
+	public void disConnect() {	
 		try {
 			if(rs != null) {
 				rs.close(); }
@@ -52,14 +53,48 @@ public class ClassInfoDao {
 		}
 	}
 
-	public static String getClassInfo() { //json ¹ÝÈ¯ ¸Þ¼Òµå
+	public void insertClassInfo(ArrayList<String> classInfo) {
+		
+		String sqlQ = "INSERT INTO P_CLASSINFO VALUES("
+				+ " (CONCAT('C',classInfoSEQ.NEXTVAL))"
+				+ ", ?"
+				+ ", ?"
+				+ ", 20"
+				+ ", 'ë°°ë“œë¯¼í„´ ê¸°ì´ˆê³¼ì •1ì£¼ì°¨(ê·¸ë¦½ìž¡ê¸°,í´ë¦¬ì–´,ì–¸ë”ìŠ¤ìœ™)2ì£¼ì°¨(í—¤ì–´í•€,í‘¸ì‰¬)3ì£¼ì°¨(ìŠ¤ë§¤ì‰¬,ë“œë¡­)4ì£¼ì°¨(ì „í›„ ìŠ¤í…, ë°°ë“œë¯¼í„´ ê·œì¹™ ë“±)'"
+				+ ", 'ë°°ë“œë¯¼í„´ ì „ìš©í™”, ë¼ì¼“')";
+		try {
+			connect();
+			
+			psmt = conn.prepareStatement(sqlQ);
+
+			psmt.setString(1, "ë°°ë“œë¯¼í„´");
+			psmt.setString(2, classInfo.get(28));
+			int resultCnt = psmt.executeUpdate();
+			if(resultCnt > 0) {
+				System.out.println("Insert ì„±ê³µ");
+			}else {
+				System.out.println("Insert ì‹¤íŒ¨");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		
+	}
+	
+	public static String getClassInfo() { //json ï¿½ï¿½È¯ ï¿½Þ¼Òµï¿½
 		String jsonStr = "";
 		try {
 			StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063301/v1/uddi:074c8870-e68b-4174-8ebf-900c95e802b1"); 
 			urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); 
 			urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); 
 
-			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=¼­ºñ½ºÅ°"); //¼­ºñ½ºÅ°¸¦ ÀÌÂÊ¿¡ ³ÖÀ¸¼¼¿ä
+			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=zWdHzw8MlJ6vDL%2FPqYJw8Fb%2BhsdMFEFXQ%2BGsTTNGK9GN2RKdeUx8ePK8mj6%2BKFzzq10ve41bjsrn9M6TSl2UQg%3D%3D"); 
 
 			URL url = new URL(urlBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();

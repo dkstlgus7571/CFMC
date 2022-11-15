@@ -7,6 +7,7 @@ public class MemberInfo {
 	public String m_phoneNum;
 	public String m_email;
 	public String m_pw;
+	public String m_date;
 	
 	
 }
