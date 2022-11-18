@@ -63,8 +63,10 @@ public class OpenCenterDao {
 			
 			
 			while(rs.next()) {
-				OpenCenter opencenter = new OpenCenter();;
+				OpenCenter opencenter = new OpenCenter();
+				
 				opencenter.setCt_name(rs.getString("시설명칭"));
+//				opencenter.s
 				opencenter.setCt_facName(rs.getString("주요시설"));
 				opencenter.setCt_facKind(rs.getString("세부시설"));
 				opencenter.setOct_revPeri(rs.getTimestamp("예약마감일자").toLocalDateTime());
@@ -73,6 +75,8 @@ public class OpenCenterDao {
 				opencenter.setCt_address(rs.getString("주소"));
 				opencenter.setCt_tel(rs.getString("시설전화번호"));
 				opencenter.setOct_epi(rs.getString("회차"));
+				
+				
 				openCenterList.add(opencenter);
 			}
 

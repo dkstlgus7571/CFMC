@@ -23,5 +23,4 @@ public class OpenClass {
 				+ ", oc_day=" + oc_day + ", oc_epi=" + oc_epi + "]";
 	}
 	
-	
 }

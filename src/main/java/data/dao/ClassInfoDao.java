@@ -12,82 +12,55 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import data.dto.CenterInfo;
 import data.dto.ClassInfo;
 
 public class ClassInfoDao {
-Connection conn = null;
-PreparedStatement psmt = null;
-ResultSet rs = null;
+	Connection conn = null;
+	PreparedStatement psmt = null;
+	ResultSet rs = null;
 
-	public void connect() throws Exception{ //DB 占쏙옙占쏙옙
+	//DB connect
+	public void connect() throws Exception{ 
 		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; 
 		String db_id = "scott";
 		String db_pw = "tiger";
 
-Class.forName("oracle.jdbc.driver.OracleDriver");
-	if(conn != null) {
-		conn.close();
-	}
-	conn = DriverManager.getConnection(db_url, db_id, db_pw);
-}
-
-public void disConnect() {
-	try {
-		if(rs != null) {
-			rs.close(); }
-
-		if(psmt != null) {
-			psmt.close(); }
-
+		Class.forName("oracle.jdbc.driver.OracleDriver");
 		if(conn != null) {
-			conn.close();}
-
-	} catch (SQLException e) {
-		e.printStackTrace();
-	}
-}
-
-public void insertClassInfo(ArrayList<String> classInfo) {
-
-	String sqlQ = "INSERT INTO P_CLASSINFO VALUES("
-			+ " (CONCAT('C',classInfoSEQ.NEXTVAL))"
-			+ ", ?"
-			+ ", ?"
-			+ ", 20"
-			+ ", '�떒�떆媛� �닾�옄濡� �쟾臾몄꽦, 泥닿퀎�꽦,�슚�쑉�꽦,湲곗큹泥대젰,嫄닿컯利앹쭊 諛� �궣�쓽 吏� �뼢�긽�쓣 �쐞�븳 �슫�룞'"
-			+ ", '�떎�궡�쟾�슜 �슫�룞�솕, �슫�룞蹂�')";
-	try {
-		connect();
-
-		psmt = conn.prepareStatement(sqlQ);
-
-		psmt.setString(1, "�냽援�");
-		psmt.setString(2, classInfo.get(23));
-		int resultCnt = psmt.executeUpdate();
-		if(resultCnt > 0) {
-			System.out.println("Insert �꽦怨�");
-		}else {
-			System.out.println("Insert �떎�뙣");
+			conn.close();
 		}
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} finally {
-		disConnect();
+		conn = DriverManager.getConnection(db_url, db_id, db_pw);
 	}
-}
+
 	
+	//DB disconnect
+	public void disConnect() {
+		try {
+			if(rs != null) {
+				rs.close(); }
+
+			if(psmt != null) {
+				psmt.close(); }
+
+			if(conn != null) {
+				conn.close();}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
-	public static String getClassInfo() { //json 占쏙옙환 占쌨소듸옙
+	//get classinfo json
+	public static String getClassInfo() { 
 		String jsonStr = "";
 		try {
 			StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063301/v1/uddi:074c8870-e68b-4174-8ebf-900c95e802b1"); 
@@ -116,9 +89,9 @@ public void insertClassInfo(ArrayList<String> classInfo) {
 			rd.close();
 			conn.disconnect();
 
-			System.out.println(sb.toString());
+			//			System.out.println(sb.toString());
 			jsonStr = sb.toString();
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,4 +99,128 @@ public void insertClassInfo(ArrayList<String> classInfo) {
 
 		return jsonStr;
 	}
+
+	
+	//select center from p_centerinfo where center's ct_code in class's ct_code
+	public List<CenterInfo> selectCenterInfoList(){
+		String sql = "select * "
+				+ " from p_centerinfo "
+				+ " where 시설코드 IN (select 시설코드 "
+				+ "                  FROM p_openclass) "; 
+
+		List<CenterInfo> centerInfoList = null;
+
+		try {
+			connect();
+			
+			psmt = conn.prepareStatement(sql);
+			
+			rs = psmt.executeQuery();
+
+			centerInfoList = new ArrayList<CenterInfo>();
+			
+			while(rs.next()) {
+				CenterInfo centerInfo = new CenterInfo();
+
+				centerInfo.setCt_code(rs.getString("시설코드")); 
+				centerInfo.setCt_name(rs.getString("시설명칭"));
+				centerInfo.setCt_facName(rs.getString("주요시설")); 
+				centerInfo.setCt_facKind(rs.getString("세부시설"));
+				centerInfo.setCt_address(rs.getString("주소"));
+				centerInfo.setCt_tel(rs.getString("시설전화번호"));
+				centerInfo.setCt_Ava(rs.getString("대관가능여부"));
+				
+				centerInfoList.add(centerInfo);				
+			}
+
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			disConnect();
+		}
+
+		return centerInfoList;
+	}
+	
+	
+	//select classinfo from p_classinfo where center's ct_code == class's ct_code
+	public List<ClassInfo> selectClassInfoList(String ct_code){
+		String sql = "select *"
+				+ " from p_classinfo c "
+				+ " where 강좌코드 IN (select 강좌코드 "
+				+ "                    FROM p_openclass oc, p_centerinfo ct "
+				+ "                    WHERE oc.시설코드 = '%'||?||'%'"; 
+
+		List<ClassInfo> classInfoList = null;
+
+		try {
+			connect();
+			
+			psmt = conn.prepareStatement(sql);
+			
+			psmt.setString(1, ct_code);
+			
+			rs = psmt.executeQuery();
+
+			classInfoList = new ArrayList<ClassInfo>();
+			
+			while(rs.next()) {
+				ClassInfo classInfo = new ClassInfo();
+
+				classInfo.setC_code(rs.getString("강좌코드")); 
+				classInfo.setC_group(rs.getString("강좌분류"));
+				classInfo.setC_name(rs.getString("강좌명")); 
+				classInfo.setC_personnel(rs.getInt("정원"));
+				classInfo.setC_intro(rs.getString("강좌소개"));
+				classInfo.setC_material(rs.getString("준비물"));
+				
+				classInfoList.add(classInfo);				
+			}
+
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			disConnect();
+		}
+
+		return classInfoList;
+	}
+
+	
+	//insert Classinfo into p_classinfo
+	public void insertClassInfo(ArrayList<String> classInfo) {
+
+		String sqlQ = "INSERT INTO P_CLASSINFO VALUES("
+				+ " (CONCAT('C',classInfoSEQ.NEXTVAL))"
+				+ ", ?"
+				+ ", ?"
+				+ ", c_personnel"
+				+ ", 'c_intro'"
+				+ ", 'c_material')";
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(sqlQ);
+
+			psmt.setString(1, "classname");
+			psmt.setString(2, classInfo.get(23));
+			int resultCnt = psmt.executeUpdate();
+			if(resultCnt > 0) {
+				System.out.println("Insert success");
+			}else {
+				System.out.println("Insert fail");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+	}
+
 }
