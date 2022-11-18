@@ -1,7 +1,7 @@
 package data.dto;
 
 public class TutorInfo { 
-	public int t_code; 
+	public String t_code; 
 	public String t_name; 
 	
 	@Override

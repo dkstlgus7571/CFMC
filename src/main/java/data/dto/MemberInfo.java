@@ -1,5 +1,7 @@
 package data.dto;
 
+import java.time.LocalDateTime;
+
 public class MemberInfo {
 	public int m_code;
 	public String m_name;
@@ -7,7 +9,7 @@ public class MemberInfo {
 	public String m_phoneNum;
 	public String m_email;
 	public String m_pw;
-	public String m_date;
+	public LocalDateTime m_date;
 	
 	
 }

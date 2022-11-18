@@ -54,7 +54,7 @@ public class ClassInfoDao {
 	}
 
 	public void insertClassInfo(ArrayList<String> classInfo) {
-		
+
 		String sqlQ = "INSERT INTO P_CLASSINFO VALUES("
 				+ " (CONCAT('C',classInfoSEQ.NEXTVAL))"
 				+ ", ?"
@@ -64,7 +64,7 @@ public class ClassInfoDao {
 				+ ", '배드민턴 전용화, 라켓')";
 		try {
 			connect();
-			
+
 			psmt = conn.prepareStatement(sqlQ);
 
 			psmt.setString(1, "배드민턴");
@@ -84,9 +84,9 @@ public class ClassInfoDao {
 		} finally {
 			disConnect();
 		}
-		
+
 	}
-	
+
 	public static String getClassInfo() { //json ��ȯ �޼ҵ�
 		String jsonStr = "";
 		try {

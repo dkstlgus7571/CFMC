@@ -1,10 +1,12 @@
 package data.dto;
 
+import java.time.LocalDateTime;
+
 public class ClassReg {
 	public int cr_mCode;
-	public int cr_cCode;		
-	public int cr_tCode;		
-	public int cr_ctCode;	
-	public int cr_appliDate;	
+	public String cr_cCode;		
+	public String cr_tCode;		
+	public String cr_ctCode;	
+	public LocalDateTime cr_appliDate;	
 	
 }
