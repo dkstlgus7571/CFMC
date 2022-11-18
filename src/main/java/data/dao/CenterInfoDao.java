@@ -14,13 +14,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import data.dto.CenterInfo;
+
 import data.dto.CenterInfo;
 
 public class CenterInfoDao {
@@ -68,7 +71,7 @@ public class CenterInfoDao {
 			urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8"));
 			urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8"));
 
-			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=����Ű"); //����Ű�� ���ʿ� ��������
+			urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=QzILSVlkcA7ltIv2%2B4YDPMKcSNxncfi9xa%2B7lfD6DJub%2B1H%2BuvCeEgDMoq8E4obYtACKt2cP%2BEFXelSm996NOQ%3D%3D"); //����Ű�� ���ʿ� ��������
 
 			URL url = new URL(urlBuilder.toString());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -99,43 +102,6 @@ public class CenterInfoDao {
 
 		return jsonStr;
 	}
-
-
-//	//시설코드하나로 나머지 칼럼 불러오기
-//	public CenterInfo selectCenterInfoByCt_code(String ct_code){
-//		String centerInfoSql = "SELECT * FROM p_centerinfo WHERE 시설코드 = ?";
-//		CenterInfo centerInfo = null;		
-//
-//		try {
-//			connect();
-//
-//			psmt = conn.prepareStatement(centerInfoSql);
-//			psmt.setString(1,ct_code);
-//
-//			rs = psmt.executeQuery();
-//
-//			centerInfo = new CenterInfo();
-//
-//			//하나만 나오게 할때는 while이 아닌 if
-//			if(rs.next()) {
-//				centerInfo.setCt_code(rs.getString("시설코드"));
-//				centerInfo.setCt_name(rs.getString("시설명칭"));
-//				centerInfo.setCt_facName(rs.getString("주요시설"));
-//				centerInfo.setCt_facKind(rs.getString("세부시설"));
-//				centerInfo.setCt_address(rs.getString("주소"));
-//				centerInfo.setCt_tel(rs.getString("시설전화번호"));
-//				centerInfo.setCt_Ava(rs.getString("대관가능여부"));
-//			}
-//
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			disConnect();
-//		}
-//		return centerInfo;
-//	}
-//
 
 	public ArrayList<CenterInfo> selectCenterNameList(){
 	      String ctInfoListSql =  "select distinct 시설명칭 from p_centerinfo where 대관가능여부 = '가능'";
@@ -196,3 +162,71 @@ public class CenterInfoDao {
 
 
 }
+	public ArrayList<CenterInfo> parsingList() {
+
+		String jsonCenter = getCenterInfo();
+		ArrayList<CenterInfo> centerInfoList = null;
+
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject)jsonParser.parse(jsonCenter);
+			JSONArray jsonArr = (JSONArray) jsonObject.get("data");
+			centerInfoList = new ArrayList<CenterInfo>();
+
+			for(int i =0; i<jsonArr.size(); i++) {
+				JSONObject dataObj = (JSONObject) jsonArr.get(i);
+				String facNameList = (String) dataObj.get("주요시설");
+				String[] array = facNameList.split("\\+");
+				for(int j = 0; j<array.length; j++) {
+					CenterInfo centerInfo = new CenterInfo();
+					centerInfo.ct_name = (String) dataObj.get("명칭");
+					centerInfo.ct_tel = (String) dataObj.get("문의처");
+					centerInfo.ct_address = (String) dataObj.get("주소");
+					centerInfo.ct_facName = array[j];
+
+					centerInfoList.add(centerInfo);
+					System.out.println("list추가");
+				}
+
+			}
+
+
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return centerInfoList;
+	}
+
+	
+
+	public void insertCenterInfo(CenterInfo ci) {
+		// 연결 부분
+
+
+		String sqlQuery = "INSERT INTO p_centerinfo VALUES(CONCAT('CT', centerinfoSEQ.nextVal), ?, ?, ?, ?, ?)";
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(sqlQuery);
+			psmt.setString(1, ci.ct_name);
+			psmt.setString(2, ci.ct_facName);
+			psmt.setString(3, ci.ct_facKind);
+			psmt.setString(4, ci.ct_address);
+			psmt.setString(5, ci.ct_tel);
+
+			int resultCnt = psmt.executeUpdate(); // executeQuery -> Select -> ResultSet
+			// executeUpdate -> insert, delete, update -> int
+			System.out.println(resultCnt);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+	}
+
