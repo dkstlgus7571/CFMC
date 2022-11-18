@@ -3,7 +3,7 @@ package data.dto;
 import java.time.LocalDateTime;
 
 public class TutorInfo { 
-	public LocalDateTime t_code; 
+	public String t_code; 
 	public String t_name; 
 	
 	@Override

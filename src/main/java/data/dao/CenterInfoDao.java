@@ -22,6 +22,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import data.dto.CenterInfo;
 
 import data.dto.CenterInfo;
 
@@ -60,7 +61,9 @@ public class CenterInfoDao {
 		}
 	}
 
-	public static String getCenterInfo() { 
+	//제이슨파싱
+	public static String getCenterInfo() { //json ��ȯ �޼ҵ�
+
 		String jsonStr = "";
 
 		try {
@@ -100,6 +103,65 @@ public class CenterInfoDao {
 		return jsonStr;
 	}
 
+	public ArrayList<CenterInfo> selectCenterNameList(){
+	      String ctInfoListSql =  "select distinct 시설명칭 from p_centerinfo where 대관가능여부 = '가능'";
+	      
+	      ArrayList<CenterInfo> selectCenterInfoList = null;
+
+	      try {
+	         connect();
+
+	         psmt = conn.prepareStatement(ctInfoListSql);
+	         rs = psmt.executeQuery();
+
+	         selectCenterInfoList = new ArrayList<CenterInfo>();
+	         
+	         while(rs.next()) {
+	            CenterInfo centerInfo = new CenterInfo();;
+	            centerInfo.setCt_name(rs.getString("시설명칭"));
+	            selectCenterInfoList.add(centerInfo);
+	         }
+
+	      } catch (Exception e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      } finally {
+	         disConnect();
+	      }
+	      return selectCenterInfoList;
+	   }   
+	
+	public ArrayList<CenterInfo> selectCenterInfoList(){
+	      String ctInfoListSql =  "select distinct 시설명칭, 주요시설,세부시설 from p_centerinfo where 대관가능여부 = '가능'";
+	      ArrayList<CenterInfo> selecCenterInfoList = null;
+
+	      try {
+	         connect();
+
+	         psmt = conn.prepareStatement(ctInfoListSql);
+	         rs = psmt.executeQuery();
+
+
+	         selecCenterInfoList = new ArrayList<CenterInfo>();
+	         while(rs.next()) {
+	            CenterInfo centerInfo = new CenterInfo();;
+	            centerInfo.setCt_name(rs.getString("시설명칭"));
+	            centerInfo.setCt_facName(rs.getString("주요시설"));
+	            centerInfo.setCt_facKind(rs.getString("세부시설"));
+	            selecCenterInfoList.add(centerInfo);
+	         }
+
+	      } catch (Exception e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      } finally {
+	         disConnect();
+	      }
+	      return selecCenterInfoList;
+	   }   
+
+
+}
 	public ArrayList<CenterInfo> parsingList() {
 
 		String jsonCenter = getCenterInfo();
@@ -167,4 +229,4 @@ public class CenterInfoDao {
 			disConnect();
 		}
 	}
-}
+
