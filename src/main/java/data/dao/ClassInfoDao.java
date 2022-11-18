@@ -75,38 +75,12 @@ public void insertClassInfo(ArrayList<String> classInfo) {
 		}else {
 			System.out.println("Insert �떎�뙣");
 		}
-		conn = DriverManager.getConnection(db_url, db_id, db_pw);
-	}
+		
+} catch(Exception e) {
+	
+}
 }
 	
 	
-	public static String getClassInfo() { //json 占쏙옙환 占쌨소듸옙
-		String jsonStr = "";
-		try {
-			StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063301/v1/uddi:074c8870-e68b-4174-8ebf-900c95e802b1"); 
-			urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); 
-			urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); 
-
-				
-
-					
-					public static String getClassInfo() { //json ��ȯ �޼ҵ�
-						String jsonStr = "";
-						try {
-							StringBuilder urlBuilder = new StringBuilder("https://api.odcloud.kr/api/15063301/v1/uddi:074c8870-e68b-4174-8ebf-900c95e802b1"); 
-							urlBuilder.append("?" + URLEncoder.encode("page","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); 
-							urlBuilder.append("&" + URLEncoder.encode("perPage","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); 
-
-							urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=zWdHzw8MlJ6vDL%2FPqYJw8Fb%2BhsdMFEFXQ%2BGsTTNGK9GN2RKdeUx8ePK8mj6%2BKFzzq10ve41bjsrn9M6TSl2UQg%3D%3D"); 
-
-			System.out.println(sb.toString());
-			jsonStr = sb.toString();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} /*Service Key*/
-
-		return jsonStr;
-	}
+	
 }

@@ -161,7 +161,7 @@ public class CenterInfoDao {
 	   }   
 
 
-}
+
 	public ArrayList<CenterInfo> parsingList() {
 
 		String jsonCenter = getCenterInfo();
@@ -229,4 +229,5 @@ public class CenterInfoDao {
 			disConnect();
 		}
 	}
+}
 
