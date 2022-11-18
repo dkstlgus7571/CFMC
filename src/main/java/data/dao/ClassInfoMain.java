@@ -33,10 +33,7 @@ public class ClassInfoMain {
 			classInfoList = new ArrayList<String>();			
 			for(int i =0; i<jsonArr.size(); i++) {
 				JSONObject dataObj = (JSONObject) jsonArr.get(i);	
-//				classInfo.c_name = (String) dataObj.get("강좌명");
 				classInfoList.add((String) dataObj.get("강좌명"));
-				
-//				.c_name = (String) dataObj.get("강좌명");
 				
 			}
 			classInfoDao.insertClassInfo(classInfoList);

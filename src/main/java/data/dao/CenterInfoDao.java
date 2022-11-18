@@ -30,8 +30,8 @@ public class CenterInfoDao {
 	PreparedStatement psmt = null;
 	ResultSet rs = null;
 
-
-	public void connect() throws Exception{ //DB ����
+	//DB connect
+	public void connect() throws Exception{ 
 		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; 
 		String db_id = "scott";
 		String db_pw = "tiger";
@@ -44,7 +44,8 @@ public class CenterInfoDao {
 		conn = DriverManager.getConnection(db_url, db_id, db_pw);
 	}
 
-	public void disConnect() {	//DB ���� ����
+	//DB disconnect
+	public void disConnect() {	
 		try {
 			if(rs != null) {
 				rs.close(); }
@@ -60,6 +61,7 @@ public class CenterInfoDao {
 		}
 	}
 
+	//get center json
 	public static String getCenterInfo() { 
 		String jsonStr = "";
 
@@ -100,8 +102,8 @@ public class CenterInfoDao {
 		return jsonStr;
 	}
 
+	//center parsing -> print center information all
 	public ArrayList<CenterInfo> parsingList() {
-
 		String jsonCenter = getCenterInfo();
 		ArrayList<CenterInfo> centerInfoList = null;
 
@@ -125,10 +127,7 @@ public class CenterInfoDao {
 					centerInfoList.add(centerInfo);
 					System.out.println("list추가");
 				}
-
 			}
-
-
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -137,13 +136,101 @@ public class CenterInfoDao {
 		return centerInfoList;
 	}
 
+
+	//select name for p_centerinfo
+	public ArrayList<CenterInfo> selectCenternameList(){
+		String ctInfoListSql =  "select distinct 시설명칭 from p_centerinfo where 대관가능여부 = '가능'  order by 시설명칭 ";
+		
+		ArrayList<CenterInfo> selectCenterInfoList = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(ctInfoListSql);
+			rs = psmt.executeQuery();
+
+			selectCenterInfoList = new ArrayList<CenterInfo>();
+			
+			while(rs.next()) {
+				CenterInfo centerInfo = new CenterInfo();;
+				centerInfo.setCt_name(rs.getString("시설명칭"));
+				selectCenterInfoList.add(centerInfo);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selectCenterInfoList;
+	}	
+
+
+	public ArrayList<CenterInfo> selectCenterInfoList(){
+		String ctInfoListSql =  "select distinct 시설명칭, 주요시설,세부시설, 시설코드 from p_centerinfo where 대관가능여부 = '가능'  order by 시설코드";
+		ArrayList<CenterInfo> selecCenterInfoList = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(ctInfoListSql);
+			rs = psmt.executeQuery();
+
+
+			selecCenterInfoList = new ArrayList<CenterInfo>();
+			while(rs.next()) {
+				CenterInfo centerInfo = new CenterInfo();;
+				centerInfo.setCt_name(rs.getString("시설명칭"));
+				centerInfo.setCt_facName(rs.getString("주요시설"));
+				centerInfo.setCt_facKind(rs.getString("세부시설"));
+				selecCenterInfoList.add(centerInfo);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selecCenterInfoList;
+	}	
 	
+	
+	//select name, fcname to p_centerinfo 
+	public ArrayList<CenterInfo> selectCenterfcNameList(){
+		String ctInfoListSql =  "select distinct 시설명칭, 주요시설 from p_centerinfo where 대관가능여부 = '가능' order by 시설명칭, 주요시설";
+		ArrayList<CenterInfo> selecCenterInfoList = null;
 
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(ctInfoListSql);
+			rs = psmt.executeQuery();
+
+
+			selecCenterInfoList = new ArrayList<CenterInfo>();
+			while(rs.next()) {
+				CenterInfo centerInfo = new CenterInfo();;
+				centerInfo.setCt_name(rs.getString("시설명칭"));
+				centerInfo.setCt_facName(rs.getString("주요시설"));
+				selecCenterInfoList.add(centerInfo);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selecCenterInfoList;
+	}	
+
+
+	//insert centerinfo to p_centerinfo
 	public void insertCenterInfo(CenterInfo ci) {
-		// 연결 부분
-
-
 		String sqlQuery = "INSERT INTO p_centerinfo VALUES(CONCAT('CT', centerinfoSEQ.nextVal), ?, ?, ?, ?, ?)";
+
 		try {
 			connect();
 
@@ -154,7 +241,8 @@ public class CenterInfoDao {
 			psmt.setString(4, ci.ct_address);
 			psmt.setString(5, ci.ct_tel);
 
-			int resultCnt = psmt.executeUpdate(); // executeQuery -> Select -> ResultSet
+			int resultCnt = psmt.executeUpdate(); 
+			// executeQuery -> Select -> ResultSet
 			// executeUpdate -> insert, delete, update -> int
 			System.out.println(resultCnt);
 		} catch (SQLException e) {
@@ -167,4 +255,6 @@ public class CenterInfoDao {
 			disConnect();
 		}
 	}
+
+
 }
