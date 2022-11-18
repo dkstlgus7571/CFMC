@@ -7,6 +7,11 @@ public class ClassInfo {
 	public int c_personnel; 
 	public String c_intro;
 	public String c_material;
+	@Override
+	public String toString() {
+		return "ClassInfo [c_code=" + c_code + ", c_group=" + c_group + ", c_name=" + c_name + ", c_personnel="
+				+ c_personnel + ", c_intro=" + c_intro + ", c_material=" + c_material + "]";
+	}
 	
 }
 

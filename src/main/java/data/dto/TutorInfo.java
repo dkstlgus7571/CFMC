@@ -1,7 +1,9 @@
 package data.dto;
 
+import java.time.LocalDateTime;
+
 public class TutorInfo { 
-	public int t_code; 
+	public LocalDateTime t_code; 
 	public String t_name; 
 	
 	@Override
