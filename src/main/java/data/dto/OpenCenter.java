@@ -1,11 +1,12 @@
 package data.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class OpenCenter {
 	public String oct_ctCode;		
-	public LocalDateTime oct_avaPeri ;	
-	public LocalDateTime oct_revPeri ;		
+	public LocalDate oct_avaPeri ;	
+	public LocalDate oct_revPeri ;		
 	public String oct_epi;			
 	public String oct_revAva;
 
@@ -16,12 +17,41 @@ public class OpenCenter {
 	public String ct_address; 
 	public String ct_tel;  
 	public String ct_Ava;
+	
+	public String ep_useStart;
+	public String ep_useEnd;
+	
 
+	//생성자
 	public OpenCenter() {
 
 	}
+	
+	public String getEp_useStart() {
+		return ep_useStart;
+	}
 
-	public OpenCenter(String oct_ctCode, LocalDateTime oct_avaPeri, LocalDateTime oct_revPeri, String oct_epi,
+	public void setEp_useStart(String ep_useStart) {
+		this.ep_useStart = ep_useStart;
+	}
+
+	public String getEp_useEnd() {
+		return ep_useEnd;
+	}
+
+	public void setEp_useEnd(String ep_useEnd) {
+		this.ep_useEnd = ep_useEnd;
+	}
+
+	public OpenCenter(String ct_name, String ct_facName, String ct_facKind, LocalDate oct_avaPeri) {//printSelectCenterInfo 메소드를 위한 생성자 작성(지우지마세요! ! !)
+		super();
+		this.oct_avaPeri = oct_avaPeri;
+		this.ct_name = ct_name;
+		this.ct_facName = ct_facName;
+		this.ct_facKind = ct_facKind;
+	}
+
+	public OpenCenter(String oct_ctCode, LocalDate oct_avaPeri, LocalDate oct_revPeri, String oct_epi,
 			String oct_revAva) {
 		super();
 		this.oct_ctCode = oct_ctCode;
@@ -31,7 +61,7 @@ public class OpenCenter {
 		this.oct_revAva = oct_revAva;
 	}
 
-	public OpenCenter(String oct_ctCode, LocalDateTime oct_avaPeri, LocalDateTime oct_revPeri, String oct_epi,
+	public OpenCenter(String oct_ctCode, LocalDate oct_avaPeri, LocalDate oct_revPeri, String oct_epi,
 			String oct_revAva, String ct_code, String ct_name, String ct_facName, String ct_facKind, String ct_address,
 			String ct_tel, String ct_Ava) {
 		super();
@@ -65,19 +95,19 @@ public class OpenCenter {
 		this.oct_ctCode = oct_ctCode;
 	}
 
-	public LocalDateTime getOct_avaPeri() {
+	public LocalDate getOct_avaPeri() {
 		return oct_avaPeri;
 	}
 
-	public void setOct_avaPeri(LocalDateTime oct_avaPeri) {
-		this.oct_avaPeri = oct_avaPeri;
+	public void setOct_avaPeri(LocalDate localDate) {
+		this.oct_avaPeri = localDate;
 	}
 
-	public LocalDateTime getOct_revPeri() {
+	public LocalDate getOct_revPeri() {
 		return oct_revPeri;
 	}
 
-	public void setOct_revPeri(LocalDateTime oct_revPeri) {
+	public void setOct_revPeri(LocalDate oct_revPeri) {
 		this.oct_revPeri = oct_revPeri;
 	}
 
