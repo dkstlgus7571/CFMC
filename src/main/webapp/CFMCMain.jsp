@@ -43,7 +43,7 @@
 	  //시설조회
       let centernameArr = []; //센터명을 가져오는 배열
   	  let centerInfoAllArr = []; //centerinfo의 시설명칭, 주요시설, 세부시설을 모두 가져오는 배열
-  	  let centerfacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
+  	  let centerFacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
   	  
    <%CenterInfoDao centerInfoDao = new CenterInfoDao();
      OpenClassDao openClassDao = new OpenClassDao();
@@ -62,7 +62,7 @@
 //센터명을 배열에 저장함
 for (CenterInfo ci : CenternameList) {%>
 	
-		centernameArr = [...centernameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
+		centerNameArr = [...centerNameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
 	     
 	      <%}%> 
 	  
@@ -84,9 +84,6 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 	  		  	      <%}%>  
 	  		  	      	  	      
    </script>
-
-
-
 	<div class="container">
 		<div id="form1">
 			<p style="text-align: center;">강좌 조회</p>
