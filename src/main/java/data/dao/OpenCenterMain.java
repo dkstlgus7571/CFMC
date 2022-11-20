@@ -15,10 +15,7 @@ public class OpenCenterMain {
 	
 		ArrayList<OpenCenter> opencenterList= new ArrayList<OpenCenter>();
 		
-		opencenterList= opencenterDao.selectOpenCenter();
-		for(int i = 0; i<opencenterList.size(); i++) {
-			System.out.println(opencenterList.get(i));
-		}
+
 	}
 
 }

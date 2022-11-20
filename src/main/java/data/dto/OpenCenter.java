@@ -1,11 +1,11 @@
 package data.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class OpenCenter {
 	public String oct_ctCode;		
-	public LocalDateTime oct_avaPeri ;	
-	public LocalDateTime oct_revPeri ;		
+	public LocalDate oct_avaPeri ;	
+	public LocalDate oct_revPeri ;		
 	public String oct_epi;			
 	public String oct_revAva;
 
@@ -21,7 +21,7 @@ public class OpenCenter {
 
 	}
 
-	public OpenCenter(String oct_ctCode, LocalDateTime oct_avaPeri, LocalDateTime oct_revPeri, String oct_epi,
+	public OpenCenter(String oct_ctCode, LocalDate oct_avaPeri, LocalDate oct_revPeri, String oct_epi,
 			String oct_revAva) {
 		super();
 		this.oct_ctCode = oct_ctCode;
@@ -31,7 +31,7 @@ public class OpenCenter {
 		this.oct_revAva = oct_revAva;
 	}
 
-	public OpenCenter(String oct_ctCode, LocalDateTime oct_avaPeri, LocalDateTime oct_revPeri, String oct_epi,
+	public OpenCenter(String oct_ctCode, LocalDate oct_avaPeri, LocalDate oct_revPeri, String oct_epi,
 			String oct_revAva, String ct_code, String ct_name, String ct_facName, String ct_facKind, String ct_address,
 			String ct_tel, String ct_Ava) {
 		super();
@@ -65,19 +65,19 @@ public class OpenCenter {
 		this.oct_ctCode = oct_ctCode;
 	}
 
-	public LocalDateTime getOct_avaPeri() {
+	public LocalDate getOct_avaPeri() {
 		return oct_avaPeri;
 	}
 
-	public void setOct_avaPeri(LocalDateTime oct_avaPeri) {
+	public void setOct_avaPeri(LocalDate oct_avaPeri) {
 		this.oct_avaPeri = oct_avaPeri;
 	}
 
-	public LocalDateTime getOct_revPeri() {
+	public LocalDate getOct_revPeri() {
 		return oct_revPeri;
 	}
 
-	public void setOct_revPeri(LocalDateTime oct_revPeri) {
+	public void setOct_revPeri(LocalDate oct_revPeri) {
 		this.oct_revPeri = oct_revPeri;
 	}
 

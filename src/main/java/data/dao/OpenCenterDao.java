@@ -17,7 +17,7 @@ public class OpenCenterDao {
 	ResultSet rs = null;
 
 
-	public void connect() throws Exception{ //DB ����
+	public void connect() throws Exception{ 
 		String db_url = "jdbc:oracle:thin:@localhost:1521:orcl"; 
 		String db_id = "scott";
 		String db_pw = "tiger";
@@ -46,12 +46,12 @@ public class OpenCenterDao {
 		}
 	}
 	
-	public ArrayList<OpenCenter> selectOpenCenter(){
+	public ArrayList<OpenCenter> selectOpenCenterList(){
 		String ctInfoListSql =  "select ct.시설명칭, ct.주요시설, ct.세부시설, oc.예약마감일자, oc.이용가능일자, oc.예약가능여부"
 				+ " ,ct.주소, ct.시설전화번호, oc.회차 "
 				+ " from p_centerinfo ct, p_opencenter oc "
 				+ " where ct.시설코드 = oc.시설코드";
-		ArrayList<OpenCenter> openCenterList = null;
+		ArrayList<OpenCenter> openCenterAllList = null;
 
 		try {
 			connect();
@@ -59,25 +59,19 @@ public class OpenCenterDao {
 			psmt = conn.prepareStatement(ctInfoListSql);
 			rs = psmt.executeQuery();
 			
-			openCenterList = new ArrayList<OpenCenter>();
-			
-			
+			openCenterAllList = new ArrayList<OpenCenter>();	
 			while(rs.next()) {
-				OpenCenter opencenter = new OpenCenter();
-				
+				OpenCenter opencenter = new OpenCenter();				
 				opencenter.setCt_name(rs.getString("시설명칭"));
-//				opencenter.s
 				opencenter.setCt_facName(rs.getString("주요시설"));
 				opencenter.setCt_facKind(rs.getString("세부시설"));
-				opencenter.setOct_revPeri(rs.getTimestamp("예약마감일자").toLocalDateTime());
-				opencenter.setOct_avaPeri(rs.getTimestamp("이용가능일자").toLocalDateTime());
+				opencenter.setOct_revPeri(rs.getDate("예약마감일자").toLocalDate());
+				opencenter.setOct_avaPeri(rs.getDate("이용가능일자").toLocalDate());
 				opencenter.setOct_revAva(rs.getString("예약가능여부"));
 				opencenter.setCt_address(rs.getString("주소"));
 				opencenter.setCt_tel(rs.getString("시설전화번호"));
 				opencenter.setOct_epi(rs.getString("회차"));
-				
-				
-				openCenterList.add(opencenter);
+				openCenterAllList.add(opencenter);
 			}
 
 		} catch (Exception e) {
@@ -86,8 +80,9 @@ public class OpenCenterDao {
 		} finally {
 			disConnect();
 		}
-		return openCenterList;
+		return openCenterAllList;
 	}
-	
+
+
 }
 																						

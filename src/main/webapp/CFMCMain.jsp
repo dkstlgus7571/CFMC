@@ -29,9 +29,9 @@
 	<%@ include file="navbar.jsp"%>
 
 	<script>
-      let centernameArr = []; //센터명을 가져오는 배열
+      let centerNameArr = []; //센터명을 가져오는 배열
   	  let centerInfoAllArr = []; //centerinfo의 시설명칭, 주요시설, 세부시설을 모두 가져오는 배열
-  	  let centerfacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
+  	  let centerFacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
   	  
    <%CenterInfoDao centerInfoDao = new CenterInfoDao();
 
@@ -42,7 +42,7 @@
 		//센터명을 배열에 저장함
 		for (CenterInfo ci : CenternameList) {%>
 	
-		centernameArr = [...centernameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
+		centerNameArr = [...centerNameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
 	     
 	      <%}%> 
 	  
@@ -66,9 +66,6 @@
 	  		  	      
 	  		  	      
    </script>
-
-
-
 	<div class="container">
 		<div id="form1">
 			<p style="text-align: center;">강좌 조회</p>
@@ -229,78 +226,63 @@
 
 
 	<script>
-	//주요시설
-   function selectCtName(){
-      var name = document.getElementById("ctName"); 
-      var value = name.options[name.selectedIndex].value; 
-    	
-      var name2 = document.getElementById("facName"); //세부시설 저장 value
-      var value2 = name2.options[name2.selectedIndex].value; 
-    //주요시설 찾기 -> facName2 id를 가진 객체를 찾음
-          let facName1 = document.getElementById('facName'); 
-    
-          facName1.options.length = 0;
-    
-          let optionList = document.createElement('option');
-          optionList.innerText = "시설명을 선택하세요";
-          facName1.append(optionList);
-
-          /* let fackind2 = document.getElementById('fackind');  
-          
-          fackind2.options.length = 0; */
-         
-          
-          for (var i = 0; i < centerfacNameArr.length; i++) {
-             if(value == centerfacNameArr[i].시설명칭){
-                 let option = document.createElement('option');
-                 
-                 option.innerText = centerfacNameArr[i].주요시설;
-                
-                 facName1.append(option);
-             }
-          } 
-   }
-   
-	
-   //세부시설
-   function selectfcKind(){
-	   console.log("여기서부터 세부시설 시작");
-
-      var name = document.getElementById("ctName"); //주요시설 저장 value
-      var value = name.options[name.selectedIndex].value; 
-
-      var name2 = document.getElementById("facName"); //세부시설 저장 value
-      var value2 = name2.options[name2.selectedIndex].value; 
-
-    //세부시설 찾기
-      let fackind2 = document.getElementById('fackind'); 
-      
-      fackind2.options.length = 0;
-    
-      let optionList = document.createElement('option');
-      optionList.innerText = "시설명을 선택하세요";
-      fackind2.append(optionList);
-    
-   
-      for (var i = 0; i < centerInfoAllArr.length; i++) {
-         if(value == centerInfoAllArr[i].시설명칭 && value2 == centerInfoAllArr[i].주요시설){
-        	
-        	 optionList = document.createElement('option');
-             
-        	 optionList.innerText = centerInfoAllArr[i].세부시설;
-             
-             fackind2.append(optionList);
-         	
-        	 }else{
-        	 console.log("시설명칭 확인해보세용");
-         }
-      }  
+    //주요시설   
+    function selectCtName(){
+       var name = document.getElementById("ctName"); 
+       var value = name.options[name.selectedIndex].value; 
+       let facName1 = document.getElementById('facName');   
+           facName1.options.length = 0;    
+           let optionList = document.createElement('option');
+           optionList.innerText = "시설명을 선택하세요";
+           facName1.append(optionList);
            
-   }
-
-   </script>
-
-
-
+           //세부시설명 초기화를 위한 코드-->
+           var facNameE = document.getElementById("facName");
+           var value2 = facNameE.options[facNameE.selectedIndex].value;           
+           if(value2.indexOf("시설명을 선택하세요") != -1){
+              var fackNameE = document.getElementById('fackind');
+              fackNameE.options.length = 0;             
+             let option = document.createElement('option');
+             option.innerText = "시설명을 선택하세요";           
+             fackNameE.append(option);
+           }
+           //세부시설명 초기화를 위한 코드 끝.         
+           for (var i = 0; i < centerfacNameArr.length; i++) {
+              if(value == centerfacNameArr[i].시설명칭){
+                  let option = document.createElement('option');                  
+                  option.innerText = centerfacNameArr[i].주요시설;\                 
+                  facName1.append(option);
+              }
+           }           
+    }
+  
+    //세부시설
+    function selectfcKind(){
+       var name = document.getElementById("ctName"); //주요시설 저장 value
+       var value = name.options[name.selectedIndex].value; 
+       var name2 = document.getElementById("facName"); //세부시설 저장 value
+       var value2 = name2.options[name2.selectedIndex].value;  
+     //세부시설 찾기
+       let fackind2 = document.getElementById('fackind');       
+       fackind2.options.length = 0;     
+       let optionList = document.createElement('option');
+       optionList.innerText = "시설명을 선택하세요";
+       fackind2.append(optionList);       
+       for (var i = 0; i < centerInfoAllArr.length; i++) {
+          if(value == centerInfoAllArr[i].시설명칭 ){
+            if(value2 == centerInfoAllArr[i].주요시설){
+             optionList = document.createElement('option');              
+             optionList.innerText = centerInfoAllArr[i].세부시설;
+              
+              fackind2.append(optionList);
+            }
+             }else{
+             console.log("시설명칭 확인 필요");
+          }
+       }  
+              
+    }
+ 
+    </script>
 </body>
 </html>

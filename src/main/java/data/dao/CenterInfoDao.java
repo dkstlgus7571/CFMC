@@ -156,6 +156,7 @@ public class CenterInfoDao {
 			while(rs.next()) {
 				CenterInfo centerInfo = new CenterInfo();;
 				centerInfo.setCt_name(rs.getString("시설명칭"));
+			System.out.println(centerInfo.getCt_address());
 				selectCenterInfoList.add(centerInfo);
 			}
 
@@ -257,6 +258,5 @@ public class CenterInfoDao {
 			disConnect();
 		}
 	}
-
 
 }
