@@ -33,9 +33,10 @@
 	<jsp:include page="CFMCMain.jsp"/>
 
 
-<% String centerName = request.getParameter("ctName");
-	out.println(centerName);
-	
+<% String selct = request.getParameter("clsctName");
+	out.println(selct);
+	/* String datetest = request.getParameter("avaPeriod").toString();
+	out.println(datetest); */
 	%>
 
 

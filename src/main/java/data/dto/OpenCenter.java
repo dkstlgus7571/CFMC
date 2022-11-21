@@ -1,6 +1,7 @@
 package data.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class OpenCenter {
 	public String oct_ctCode;		
@@ -98,8 +99,8 @@ public class OpenCenter {
 		return oct_avaPeri;
 	}
 
-	public void setOct_avaPeri(LocalDate oct_avaPeri) {
-		this.oct_avaPeri = oct_avaPeri;
+	public void setOct_avaPeri(LocalDate localDate) {
+		this.oct_avaPeri = localDate;
 	}
 
 	public LocalDate getOct_revPeri() {

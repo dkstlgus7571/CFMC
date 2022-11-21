@@ -71,7 +71,6 @@
 			
 			</select>
 			</label>
-			</label>
 			<label for="inputState">강좌명 <select class="form-select"
 			name="className" id="className">
 				<option selected>강좌명을 선택하세요.</option>
@@ -189,7 +188,7 @@
            var cGruopE = document.getElementById('className');
            cGruopE.options.length = 0;          
           let option = document.createElement('option');
-          option.innerText = "시설명을 선택하세요.";         
+          option.innerText = "강좌명을 선택하세요.";         
           cGruopE.append(option);
         }
         //세부시설명 초기화를 위한 코드 끝.               
@@ -228,7 +227,7 @@
 	    }           
 	 }
  
-  document.getElementById('serchBtn').addEventListener('click', (e)=> {
+/*   document.getElementById('serchBtn').addEventListener('click', (e)=> {
 		e.preventDefault();
 		let form = document.ReservationCenterForm;
 	 	if(form.selecCenter.value == "센터명을 선택하세요."){
@@ -242,7 +241,7 @@
 			form.action = 'Reservation_center_serch.jsp';
 			form.submit();		
 		}
-	})
+	}) */
 
 </script>
 </body>
