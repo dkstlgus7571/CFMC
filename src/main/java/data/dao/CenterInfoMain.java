@@ -15,14 +15,6 @@ public class CenterInfoMain {
 		// TODO Auto-generated method stub
 				
 
-		CenterInfoDao centerInfoDao =new CenterInfoDao();
-//		
-// 		ArrayList<CenterInfo> CenternameList = centerInfoDao.selectCenternameList();
-// 		System.out.println(CenternameList);
- 		
- 		ArrayList<CenterInfo> CenterInfoAllList = centerInfoDao.selectCenterInfoList();
- 		ArrayList<CenterInfo> CenterfacNameList = centerInfoDao.selectCenterfcNameList();
-
 	}
 
 }

@@ -101,7 +101,8 @@
 				<input type="hidden"
 				name="facName" value="<%=openCenter.getCt_facName()%>"> 
 				<input type="hidden" name="facKind" value="<%=openCenter.getCt_facKind()%>">
-			<input type="hidden" name="avaPeri"> <input type="hidden"
+			<input type="hidden" name="avaPeriod"> 
+			<input type="hidden"
 				name="epi">
 			<button id="revCenterBtn" type="submit">예약하기</button>
 		</form>
