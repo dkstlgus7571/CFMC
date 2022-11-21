@@ -15,6 +15,7 @@
 </head>
 <body>
 	<%	String userId = request.getParameter("userID");
+		String pass = request.getParameter("userPassword"); 
 		MemberInfoDao memDao = new MemberInfoDao();	
 		
 		int result = memDao.login(mem.getmEmail(), mem.getmPw());
@@ -22,6 +23,9 @@
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			session.setAttribute("MEMBERID", userId);
+			session.setAttribute("MEMBERPW", pass);
+
+			session.setAttribute("memPw", pass);
 			script.println("location.href = 'CFMCMain.jsp'");
 			script.println("</script>");
 			

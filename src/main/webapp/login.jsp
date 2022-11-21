@@ -28,6 +28,7 @@
 					<h3 style="text-align: center;">로그인 화면</h3>
 				<div class="form-group">
 					<input type="email" class="form-control" placeholder="이메일" name="userID" maxlength="20">
+					
 				</div>
 				<div class="form-group">
 					<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
@@ -35,6 +36,7 @@
 				<input type="submit" class="btn btn-primary form-control" value="로그인">
 					
 				</form>
+
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
