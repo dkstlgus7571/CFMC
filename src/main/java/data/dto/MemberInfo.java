@@ -1,7 +1,8 @@
 package data.dto;
 
-import java.time.LocalDate;
-
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.*;
 public class MemberInfo {
 	private int mCode;
 	private String mName;
@@ -9,8 +10,8 @@ public class MemberInfo {
 	private String mPhoneNum;
 	private String mEmail;
 	private String mPw;
-	private LocalDate mDate;
-	
+	private Date mDate;
+
 	public int getmCode() {
 		return mCode;
 	}
@@ -47,10 +48,10 @@ public class MemberInfo {
 	public void setmPw(String mPw) {
 		this.mPw = mPw;
 	}
-	public LocalDate getmDate() {
+	public Date getmDate() {
 		return mDate;
 	}
-	public void setmDate(LocalDate mDate) {
+	public void setmDate(Date mDate) {
 		this.mDate = mDate;
 	}
 	

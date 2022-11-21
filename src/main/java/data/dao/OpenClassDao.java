@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 
 import data.dto.OpenClass;
 
+
 public class OpenClassDao {
 	Connection conn = null;
 	PreparedStatement psmt = null;

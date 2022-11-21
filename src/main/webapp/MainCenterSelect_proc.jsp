@@ -134,10 +134,11 @@
 
 	     	let form = document.chooseRevCt;
 	     	
-	     	form.avaPeriod.value = selectedArr.substring(0,10).toString();
+	     	form.avaPeri.value = selectedArr.substring(0,10).toString();
 	     	form.epi.value = selectedArr.substring(10);
 
-	     	form.action="CFMCMain_Select.jsp";
+	     	console.log("예약폼으로 넘어갑니다!");
+	     	form.action="Reservation_center.jsp";
 	    	form.method="post";
 	    	form.submit();
 	       }

@@ -48,7 +48,7 @@
 			} else {
 			%>	
 				<span class="navbar-text"> 
-					<a href="#">마이페이지 &nbsp;</a>
+					<a href="mypage.jsp">마이페이지 &nbsp;</a>
 				</span>
 				<span class="navbar-text"> 
 					<a href="logout.jsp">
