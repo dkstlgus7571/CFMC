@@ -37,7 +37,9 @@
   		<li class="list-group-item"><h6>번호 </h6><%=userInfo.getmPhoneNum() %></li>
   		<li class="list-group-item"><h6>가입날짜 <h6><%=userInfo.getmDate() %></li>
 		</ul>
-
+<form >
+<input type="hidden" name="memcode" value="<%userInfo.getmCode();%>">
+</form>
        <% %>
     <span class="d-block p-2 text-bg-primary">강좌예약내역</span>
 	<table class="table">

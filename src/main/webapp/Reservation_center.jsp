@@ -67,7 +67,7 @@
 	String facilityName = request.getParameter("facName");
 	String facilityKind = request.getParameter("facKind");
 	String epi = request.getParameter("epi");
-	String daytest = request.getParameter("avaPeri");	
+	String daytest = request.getParameter("avaPeriod");	
  	int YearStr = Integer.parseInt(daytest.substring(0,4)); 
 	int MonthStr = Integer.parseInt(daytest.substring(0,7).substring(5)); 
 	int DayStr = Integer.parseInt(daytest.substring(8)); 
