@@ -22,8 +22,7 @@ public class CenterInfoMain {
  		
  		ArrayList<CenterInfo> CenterInfoAllList = centerInfoDao.selectCenterInfoList();
  		ArrayList<CenterInfo> CenterfacNameList = centerInfoDao.selectCenterfcNameList();
- 		System.out.println(CenterInfoAllList);
- 		System.out.println(CenterfacNameList);
+
 	}
 
 }

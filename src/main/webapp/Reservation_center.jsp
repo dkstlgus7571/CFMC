@@ -5,6 +5,9 @@
 <%@ page import="data.dao.OpenCenterDao"%>
 <%@ page import="data.dto.OpenCenter"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.time.*"%>
+<%@ page import="java.time.format.DateTimeFormatter"%>
+<% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,88 +93,97 @@
 			</label>
 			<button type="submit" id='serchBtn'class="btn btn-outline-primary">조회</button>
 		</form>
+		
+		
 	</div>
 
+	<%
+	String centerName = request.getParameter("ctName");
+	String facilityName = request.getParameter("facName");
+	String facilityKind = request.getParameter("facKind");
+	String epi = request.getParameter("epi");
+	String daytest = request.getParameter("avaPeri");	
+ 	int YearStr = Integer.parseInt(daytest.substring(0,4)); 
+	int MonthStr = Integer.parseInt(daytest.substring(0,7).substring(5)); 
+	int DayStr = Integer.parseInt(daytest.substring(8)); 
+	LocalDate avaPeridate = LocalDate.of(YearStr, MonthStr, DayStr);
+
+	
+	OpenCenter openCenter = new OpenCenter();
+	openCenter.setCt_name(centerName);
+	openCenter.setCt_facName(facilityName);
+	openCenter.setCt_facKind(facilityKind);
+	openCenter.setOct_epi(epi);
+	openCenter.setOct_avaPeri(avaPeridate); 
+	OpenCenterDao openCenterDao = new OpenCenterDao();
+	
+	ArrayList<OpenCenter> reservationDetailList = new ArrayList<OpenCenter>();
+	
+	reservationDetailList = openCenterDao.ReserCenter(openCenter);
+	if(reservationDetailList != null && reservationDetailList.size()>0){ //조회된 결과 보여주기
+		for(int i = 0; i<reservationDetailList.size(); i++){
+		%>
 		<table class="table">
 		<tbody>
-
 			<tr>
 				<th scope="row">센터명</th>
-				<%-- 		<% OpenCenterDao opencenterDao = new OpenCenterDao(); 
-   			ArrayList<OpenCenter> openCenterList = opencenterDao.selectOpenCenter();%>									
-   			<%
-               if (openCenterList != null && openCenterList.size() > 0) {
-                  for (OpenCenter opencenter : openCenterList) {
-               %>
-				<td><%=opencenter.getCt_name()%></td>
-				<% }} %> --%>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td ><%=openCenter.getCt_name()%></td>
 			</tr>
 			<tr>
 				<th scope="row">시설명</th>
-				<td>다목적체육관</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%=openCenter.getCt_facName()%></td>
 			</tr>
 			<tr>
 				<th scope="row">세부시설</th>
-				<td>-</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%=openCenter.getCt_facKind()%></td>
 			</tr>
 			<tr>
 				<th scope="row">이용가능일자</th>
-				<td>22-12-01 ~ 23-02-29</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td name="avqperi" value="<%=openCenter.getOct_avaPeri()%>">
+				<%=openCenter.getOct_avaPeri()%></td>
 			</tr>
 			<tr>
 				<th scope="row">예약마감일자</th>
-				<td>22-12-01 ~ 23-02-29</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%=reservationDetailList.get(i).getOct_revPeri()%></td>
 			</tr>
 			<tr>
 				<th scope="row">주소</th>
-				<td>천안시 서북구 번영로 208(백석동, 종합운동장)</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%=reservationDetailList.get(i).getCt_address()%></td>
 			</tr>
 			<tr>
 				<th scope="row">전화번호</th>
-				<td>041-123-1234</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td><%=reservationDetailList.get(i).getCt_tel()%></td>
 			</tr>
 			<tr>
 				<th scope="row">회차</th>
-				<th scope="row">이용시간</th>
-				<th scope="row">예약현황</th>
+				<td name="epi" value="<%=reservationDetailList.get(i).getOct_epi()%>">
+				<%=reservationDetailList.get(i).getOct_epi()%></td>
 			</tr>
 			<tr>
-				<td>1회차</td>
-				<td>10:00 ~ 12:00</td>
-				<td>Y</td>
+				<th scope="row">이용시작시간</th>
+				<td><%=reservationDetailList.get(i).getEp_useStart()%></td>
 			</tr>
+			<tr>
+				<th scope="row">이용종료시간</th>
+				<td><%=reservationDetailList.get(i).getEp_useEnd()%></td>
+			</tr>
+			<tr>
+				<th scope="row">예약현황</th>
+				<td><%=reservationDetailList.get(i).getCt_Ava()%></td>
+			</tr>
+		
 		</tbody>
 	</table>
-	<button type="button" class="btn btn-primary btn-lg" id="reserBtn">예약하기</button>
-
+	<form name="Reservation_save_Form" action="Reservation_center_save.jsp">
+		<input type="hidden"
+			value="<%=reservationDetailList.get(i).getCt_code()%>" name="ctcode"> 
+		<input type="hidden"
+			value="<%=reservationDetailList.get(i).getOct_epi()%>" name="epi"> 
+		<input type="hidden"
+			value="<%=openCenter.getOct_avaPeri()%>" name="avaperi">
+		<button type="submit" class="btn btn-primary btn-lg" id="reserBtn">예약하기</button>
+</form>
+<%}} %>
 <script>
 function selectCtName(){
     var name = document.getElementById("ctName"); 

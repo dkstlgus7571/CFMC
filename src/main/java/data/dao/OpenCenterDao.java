@@ -163,9 +163,6 @@ public class OpenCenterDao {
 				
 				openCenterList.add(openCenter);
 			}
-			
-			System.out.println("openCenter 조회 완료");
-			System.out.println("회차 종료");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -176,69 +173,60 @@ public class OpenCenterDao {
 		
 		return openCenterList;
 		
+	}	
+	public ArrayList<OpenCenter> ReserCenter(OpenCenter oct){
+		String Sql =  "select c.시설코드 , c.시설명칭, c.주요시설, c.세부시설, oc.이용가능일자, oc.예약마감일자, "
+				+ " c.주소, c.시설전화번호, ei.회차, ei.이용시작시간, ei.이용종료시간,oc.예약가능여부 "
+				+ " from p_openCenter oc, p_centerInfo c, p_epiInfo ei "
+				+ " where oc.시설코드 = c.시설코드 "
+				+ " AND oc.회차 = ei.회차 "
+				+ " AND c.시설명칭 = ? "
+				+ " AND c.주요시설 = ? "
+				+ " AND c.세부시설 = ? "
+				+ " AND ei.회차 = ? "
+				+ " AND oc.이용가능일자 = TO_DATE(?, 'YY-MM-DD')";
+
+		OpenCenter openCenter = null;
+		ArrayList<OpenCenter> reservationDetailList = null;
+		
+		
+		try {
+			connect();
+			
+			reservationDetailList = new ArrayList<OpenCenter>();
+
+			psmt = conn.prepareStatement(Sql);
+			
+			psmt.setString(1, oct.ct_name); //시설명칭
+			psmt.setString(2, oct.ct_facName); //주요시설
+			psmt.setString(3, oct.ct_facKind); //세부시설
+			psmt.setString(4, oct.oct_epi);//회차
+			psmt.setString(5, oct.oct_avaPeri.toString()); //이용가능일자
+			
+			rs = psmt.executeQuery();
+
+			while(rs.next()) {
+				openCenter = new OpenCenter();		
+				openCenter.setCt_code(rs.getString("시설코드"));
+				openCenter.setCt_name(rs.getString("시설명칭"));
+				openCenter.setCt_facName(rs.getString("주요시설"));
+				openCenter.setCt_facKind(rs.getString("세부시설"));
+				openCenter.setOct_avaPeri(rs.getDate("이용가능일자").toLocalDate());
+				openCenter.setOct_revPeri(rs.getDate("예약마감일자").toLocalDate());
+				openCenter.setCt_address(rs.getString("주소"));
+				openCenter.setCt_tel(rs.getString("시설전화번호"));
+				openCenter.setOct_epi(rs.getString("회차"));
+				openCenter.setEp_useStart(rs.getString("이용시작시간"));
+				openCenter.setEp_useEnd(rs.getString("이용종료시간"));
+				openCenter.setCt_Ava(rs.getString("예약가능여부"));
+				reservationDetailList.add(openCenter);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}		
+		return reservationDetailList;		
 	}
-
-
-//	//select date, epi
-//	public OpenCenter SelectCenterEpi(OpenCenter oct){
-//		String Sql =  "select c.시설코드 , c.시설명칭, c.주요시설, c.세부시설, oc.이용가능일자, oc.예약가능여부, ei.회차, ei.이용시작시간, ei.이용종료시간 "
-//				+ " from p_openCenter oc, p_centerInfo c, p_epiInfo ei "
-//				+ " where oc.시설코드 = c.시설코드 "
-//				+ " AND oc.회차 = ei.회차 "
-//				+ " AND c.시설명칭 = ? "
-//				+ " AND c.주요시설 = ? "
-//				+ " AND c.세부시설 = ? "
-//				+ " AND oc.이용가능일자 = TO_DATE(?, 'YY-MM-DD')  "
-//				+ " AND oc.예약가능여부 = 'Y'"
-//				+ " ORDER BY oc.이용가능일자, oc.회차"
-//				;
-//
-//		OpenCenter openCenter = null;
-//		ArrayList<OpenCenter> openCenterList = null;
-//		
-//		
-//		try {
-//			connect();
-//			
-//			openCenterList = new ArrayList<OpenCenter>();
-//
-//			psmt = conn.prepareStatement(Sql);
-//			
-//			psmt.setString(1, oct.ct_name); //시설명칭
-//			psmt.setString(2, oct.ct_facName); //주요시설
-//			psmt.setString(3, oct.ct_facKind); //세부시설
-//			psmt.setString(4, oct.oct_avaPeri.toString()); //이용가능일자
-//			
-//			rs = psmt.executeQuery();
-//
-//			while(rs.next()) {
-//				openCenter = new OpenCenter();
-//				
-//				openCenter.setCt_name(rs.getString("시설명칭"));
-//				openCenter.setCt_facName(rs.getString("주요시설"));
-//				openCenter.setCt_facKind(rs.getString("세부시설"));
-//				openCenter.setOct_avaPeri(rs.getDate("이용가능일자").toLocalDate());
-//				openCenter.setCt_Ava(rs.getString("예약가능여부"));
-//				openCenter.setOct_epi(rs.getString("회차"));
-//				openCenter.setEp_useStart(rs.getString("이용시작시간"));
-//				openCenter.setEp_useEnd(rs.getString("이용종료시간"));
-//				
-//				openCenterList.add(openCenter);
-//			}
-//			
-//			System.out.println("openCenter 조회 완료");
-//			System.out.println("회차 종료");
-//
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			disConnect();
-//		}
-//		
-//		return openCenterList;
-//		
-//	}
-
-
 }
