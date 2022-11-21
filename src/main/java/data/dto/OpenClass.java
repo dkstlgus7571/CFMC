@@ -4,46 +4,46 @@ import java.time.LocalDate;
 
 public class OpenClass {
 	public int ocCode;
-	public String oc_cCode; 
-	public String oc_tCode; 
-	public String oc_ctCode;	
-	public LocalDate oc_acceptStart; 
-	public LocalDate oc_acceptEnd; 
+	public String oc_cCode;
+	public String oc_tCode;
+	public String oc_ctCode;
+	public LocalDate oc_acceptStart;
+	public LocalDate oc_acceptEnd;
 	public LocalDate oc_classStart;
-	public LocalDate oc_classEnd;	
+	public LocalDate oc_classEnd;
 	public int oc_appliNum;
 	public String oc_day;
 	public String oc_epi;
-	
+
 	//classInfo
 	public String c_code;
 	public String c_group;
 	public String c_name;
-	public int c_personnel; 
+	public int c_personnel;
 	public String c_intro;
 	public String c_material;
-	
+
 	//centerInfo
-	public String ct_code; 
-	public String ct_name; 
-	public String ct_facName; 
-	public String ct_facKind; 
-	public String ct_address; 
-	public String ct_tel;  
+	public String ct_code;
+	public String ct_name;
+	public String ct_facName;
+	public String ct_facKind;
+	public String ct_address;
+	public String ct_tel;
 	public String ct_Ava;
-	
+
 	//epiinfo
 	public String ep_epi;
 	public String ep_useStart;
 	public String ep_useEnd;
-	
+
 	//tutorinfo
-	
-	public String t_code; 
+	public String t_code;
 	public String t_name;
+
 	@Override
 	public String toString() {
-		
+
 		return "OpenClass [ocCode=" + ocCode + ", oc_cCode=" + oc_cCode + ", oc_tCode=" + oc_tCode + ", oc_ctCode="
 				+ oc_ctCode + ", oc_acceptStart=" + oc_acceptStart + ", oc_acceptEnd=" + oc_acceptEnd
 				+ ", oc_classStart=" + oc_classStart + ", oc_classEnd=" + oc_classEnd + ", oc_appliNum=" + oc_appliNum
@@ -227,7 +227,7 @@ public class OpenClass {
 	}
 	public void setT_name(String t_name) {
 		this.t_name = t_name;
-	} 
-	
-	
+	}
+
+
 }

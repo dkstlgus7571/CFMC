@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="data.dao.MemberInfoDao"%>
-<%@ page import="data.dto.MemberInfo"%>
-<%@ page import="data.dto.ClassReg"%>
-<%@ page import="data.dto.CenterRent"%>
-<%@ page import="java.io.PrintWriter"%>
-<%@ page import="java.util.ArrayList"%>
-<jsp:useBean id="cr" class="data.dto.ClassReg" scope="page" />
-<%
-request.setCharacterEncoding("UTF-8");
-%>
+    pageEncoding="UTF-8"%>
+<%@ page import="data.dao.MemberInfoDao" %>
+<%@ page import = "data.dto.MemberInfo"%>
+<%@ page import = "data.dto.ClassReg"%>
+<%@ page import = "data.dto.CenterRent"%>
+<%@ page import="java.io.PrintWriter" %>
+<%@ page import ="java.util.ArrayList" %>
+<jsp:useBean id="cr" class="data.dto.ClassReg" scope="page"/>
+<% request.setCharacterEncoding("UTF-8"); %>
 <jsp:useBean id="user" class="data.dto.MemberInfo" scope="page" />
 <!DOCTYPE html>
 <html>
@@ -22,35 +20,26 @@ request.setCharacterEncoding("UTF-8");
 	<nav>
 		<%@ include file="navbar.jsp"%>
 	</nav>
-	<%
-	// ---> 2.
-	MemberInfoDao dao = new MemberInfoDao();
-	// ArrayList userInfo =new ArrayList();
-	user.setmEmail((String) session.getAttribute("MEMBERID"));
-	user.setmPw((String) session.getAttribute("MEMBERPW"));
-	MemberInfo userInfo = new MemberInfo();
-	userInfo = dao.myInfo(user);
+	<%	// ---> 2.
+		MemberInfoDao dao = new MemberInfoDao();
+// 		ArrayList userInfo =new ArrayList();
+		user.setmEmail((String)session.getAttribute("MEMBERID"));
+		user.setmPw((String)session.getAttribute("MEMBERPW"));
+		MemberInfo userInfo = new MemberInfo();
+		userInfo = dao.myInfo(user);	
 	%>
+	
+		<span class="d-block p-2 text-bg-primary">개인정보조회</span>
+		<ul class="list-group list-group-flush">
+		
+		<li class="list-group-item"><h6>이름 </h6><%=userInfo.getmName() %></li>
+ 		<li class="list-group-item"><h6>생년월일 </h6><%=userInfo.getmBirth() %></li>
+  		<li class="list-group-item"><h6>번호 </h6><%=userInfo.getmPhoneNum() %></li>
+  		<li class="list-group-item"><h6>가입날짜 <h6><%=userInfo.getmDate() %></li>
+		</ul>
 
-	<span class="d-block p-2 text-bg-primary">개인정보조회</span>
-	<ul class="list-group list-group-flush">
-
-		<li class="list-group-item"><h6>이름</h6><%=userInfo.getmName()%></li>
-		<li class="list-group-item"><h6>생년월일</h6><%=userInfo.getmBirth()%></li>
-		<li class="list-group-item"><h6>번호</h6><%=userInfo.getmPhoneNum()%></li>
-		<li class="list-group-item"><h6>
-				가입날짜
-				<h6><%=userInfo.getmDate()%></li>
-				회원코드
-				<h6><%=userInfo.getmCode()%></li>
-	</ul>
-	<form>
-	<input type="text" name="memcode" value="<%=userInfo.getmCode()%>">
-	</form>
-	<%
-
-	%>
-	<span class="d-block p-2 text-bg-primary">강좌예약내역</span>
+       <% %>
+    <span class="d-block p-2 text-bg-primary">강좌예약내역</span>
 	<table class="table">
 		<thead>
 			<tr>
@@ -63,24 +52,26 @@ request.setCharacterEncoding("UTF-8");
 			</tr>
 		</thead>
 		<tbody>
-			<%
-			ArrayList reglist = dao.regInfo(userInfo);
-			ClassReg cr1 = new ClassReg();
-			for (int i = 0; i < reglist.size(); i++) {
+			<%	
+  	ArrayList reglist = dao.regInfo(userInfo);
+  	ClassReg cr1 = new ClassReg();
+  	for(int i=0; i<reglist.size(); i++) {
+  		
+  		cr1 = (ClassReg)reglist.get(i);
 
-				cr1 = (ClassReg) reglist.get(i);
-			%>
+  		
+  	%>
 			<tr>
-				<th scope="row"><%=i + 1%></th>
-				<td><%=cr1.getCr_cName()%></td>
-				<td><%=cr1.getCr_ctName()%></td>
-				<td><%=cr1.getCr_tName()%></td>
-				<td><%=cr1.getCr_appliDate()%></td>
+				<th scope="row"><%= i+1 %></th>
+				<td><%=cr1.getCr_cName() %></td>
+				<td><%=cr1.getCr_ctName() %></td>
+				<td><%=cr1.getCr_tName() %></td>
+				<td><%=cr1.getCr_appliDate() %></td>
 			</tr>
-			<%
-			}
-			%>
-\
+			<%} %>
+
+
+
 		</tbody>
 	</table>
 	<span class="d-block p-2 text-bg-primary">시설대여내역</span>
@@ -99,19 +90,21 @@ request.setCharacterEncoding("UTF-8");
 			</tr>
 		</thead>
 		<tbody>
-			<%
-			ArrayList rentlist = dao.rentInfo(userInfo);
-			CenterRent crt = new CenterRent();
-			for (int i = 0; i < rentlist.size(); i++) {
+			<%	
+  	ArrayList rentlist = dao.rentInfo(userInfo);
+  	CenterRent crt = new CenterRent();
+  	for(int i=0; i<rentlist.size(); i++) {
+  		
+  		crt = (CenterRent)rentlist.get(i);
 
-				crt = (CenterRent) rentlist.get(i);
-			%>
+  		
+  	%>
 			<tr>
-				<th scope="row"><%=i + 1%></th>
-				<td><%=crt.getCtr_ctName()%></td>
-				<td><%=crt.getCtr_ctFacName()%></td>
-				<td><%=crt.getCtr_ctFacKind()%></td>
-				<td><%=crt.getCtr_appliDate()%></td>
+				<th scope="row"><%= i+1 %></th>
+				<td><%=crt.getCtr_ctName() %></td>
+				<td><%=crt.getCtr_ctFacName() %></td>
+				<td><%=crt.getCtr_ctFacKind() %></td>
+				<td><%=crt.getCtr_appliDate() %></td>
 				<td><%=crt.getCtr_epiUseStart() %></td>
 				<td><%=crt.getCtr_epiUseEnd() %></td>
 				<td><%=crt.getCtr_revDate() %></td>

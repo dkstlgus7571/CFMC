@@ -89,40 +89,40 @@ public class MemberInfoDao {
 		}
 		return -1; // 데이터베이스 오류
 	}
-
+	
 	public MemberInfo myInfo(MemberInfo user) {
-		MemberInfo userInfo = null;
-
+		MemberInfo userInfo  = null;
+		
 		String sql = "SELECT 회원코드, 이름, 생년월일, 전화번호, 가입날짜 FROM P_MEMBERINFO WHERE 이메일 = ? and 비밀번호 = ? ";
-
+		
 		try {
 			connect();
 			userInfo = new MemberInfo();
-
+			
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, user.getmEmail());
 			psmt.setString(2, user.getmPw());
-
-
+			
+			
 			rs = psmt.executeQuery();
 			while(rs.next()) {
-				userInfo.setmName(rs.getString("이름"));
-				userInfo.setmBirth(rs.getInt ("생년월일"));
-				userInfo.setmPhoneNum(rs.getString("전화번호"));
-				userInfo.setmDate(rs.getDate("가입날짜"));
-				userInfo.setmCode(rs.getInt("회원코드"));
+			userInfo.setmName(rs.getString("이름"));
+			userInfo.setmBirth(rs.getInt ("생년월일"));
+			userInfo.setmPhoneNum(rs.getString("전화번호"));
+			userInfo.setmDate(rs.getDate("가입날짜"));
+			userInfo.setmCode(rs.getInt("회원코드"));
 			}
-
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			disConnect();
 		}
-
+		
 		return userInfo;
 	}
-
-
+	
+	
 	public ArrayList<ClassReg> regInfo(MemberInfo user) {
 		String sql = "SELECT C.강좌명, CT.시설명칭, T.이름, CR.신청날짜\r\n"
 				+ "FROM P_CLASSREG CR, P_MEMBERINFO M, P_CENTERINFO CT, P_TUTORINFO T, P_CLASSINFO C "
@@ -137,7 +137,7 @@ public class MemberInfoDao {
 				+ "CR.회원코드 = ?";
 		ArrayList<ClassReg> reglist = null;
 		try {
-
+		
 			connect();
 			reglist = new ArrayList<ClassReg>();
 			psmt = conn.prepareStatement(sql);
@@ -150,19 +150,19 @@ public class MemberInfoDao {
 				classreg.setCr_tName(rs.getString ("이름"));
 				classreg.setCr_appliDate(rs.getDate("신청날짜"));
 				reglist.add(classreg);
-			}
-
-
+				}
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			disConnect();
 		}
-
+		
 		return reglist;
-
+		
 	}
-
+	
 	public ArrayList<CenterRent> rentInfo(MemberInfo user) {
 		String sql = "select cti.시설명칭, cti.주요시설, cti.세부시설, ctr.대관날짜, ctepi.이용시작시간, ctepi.이용종료시간, ctr.신청날짜 "
 				+ "from p_centerrent ctr, p_centerInfo cti, p_epiinfo ctepi "
@@ -170,7 +170,7 @@ public class MemberInfoDao {
 				+ "and ctr.회원코드 = ?";
 		ArrayList<CenterRent> rentlist = null;
 		try {
-
+		
 			connect();
 			rentlist = new ArrayList<CenterRent>();
 			psmt = conn.prepareStatement(sql);
@@ -186,18 +186,18 @@ public class MemberInfoDao {
 				centerrent.setCtr_epiUseEnd(rs.getString("이용종료시간"));
 				centerrent.setCtr_revDate(rs.getDate("신청날짜"));
 				rentlist.add(centerrent);
-			}
-
-
+				}
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			disConnect();
 		}
-
-		return rentlist;
+		
+		return rentlist;		
 	}
-
-
-
+		
+	
+	
 }
