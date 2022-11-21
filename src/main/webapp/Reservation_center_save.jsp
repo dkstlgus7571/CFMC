@@ -33,13 +33,17 @@
 	String t = String.valueOf(memcode);
 
  	CenterRentDao centerRentDao = new CenterRentDao();
-	centerRentDao.procedure_centerrent_save(memcode,ctcode, Date.valueOf(avaPeridate),epi);
+ 	centerRentDao.procedure_centerrent_save(memcode,ctcode, Date.valueOf(avaPeridate),epi);
+ 	%>
+ 	
+ 	<script>
+ 	if(confirm("예약이 완료되었습니다.마이페이지로 이동하겠습니까?") == true){
+ 		location.replace('mypage.jsp');
+ 	}else {		
+ 		location.href = "CFMCMain.jsp";
+ 	}
 
-
-%>
-	
-
-
-
+	</script>
+		
 </body>
 </html>

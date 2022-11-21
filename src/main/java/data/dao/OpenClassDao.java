@@ -16,7 +16,6 @@ import org.json.simple.parser.ParseException;
 import data.dto.CenterInfo;
 import data.dto.OpenClass;
 
-
 public class OpenClassDao {
 	Connection conn = null;
 	PreparedStatement psmt = null;
@@ -51,5 +50,171 @@ public class OpenClassDao {
 		}
 	}
 
-	
+	public ArrayList<OpenClass> selectCtNameOpenclassList(){
+		;		String ctNameSql =  "select distinct cti.시설명칭 "
+				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti where oc.강좌코드 = ci.강좌코드 and oc.시설코드 = cti.시설코드";
+		ArrayList<OpenClass> selectCtNameOpenclassList = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(ctNameSql);
+			rs = psmt.executeQuery();
+
+
+			selectCtNameOpenclassList = new ArrayList<OpenClass>();
+			while(rs.next()) {
+				OpenClass openClass = new OpenClass();;
+				openClass.setCt_name(rs.getString("시설명칭"));
+				selectCtNameOpenclassList.add(openClass);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selectCtNameOpenclassList;
+	}	
+
+	public ArrayList<OpenClass> selectGruopOpenclassList(){
+		String groupSql =  "select distinct cti.시설명칭, ci.강좌분류"
+				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti where oc.강좌코드 = ci.강좌코드 and oc.시설코드 = cti.시설코드";
+		ArrayList<OpenClass> selectGruopOpenclassList = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(groupSql);
+			rs = psmt.executeQuery();
+
+
+			selectGruopOpenclassList = new ArrayList<OpenClass>();
+			while(rs.next()) {
+				OpenClass openClass = new OpenClass();;
+				openClass.setCt_name(rs.getString("시설명칭"));
+				openClass.setC_group(rs.getString("강좌분류"));
+				selectGruopOpenclassList.add(openClass);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selectGruopOpenclassList;
+	}
+
+	public ArrayList<OpenClass> selectClassNameList(){
+		String cNameSql =  "select distinct cti.시설명칭, ci.강좌분류, ci.강좌명"
+				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti where oc.강좌코드 = ci.강좌코드 and oc.시설코드 = cti.시설코드";
+		ArrayList<OpenClass> selectClassNameList = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(cNameSql);
+			rs = psmt.executeQuery();
+
+
+			selectClassNameList = new ArrayList<OpenClass>();
+			while(rs.next()) {
+				OpenClass openClass = new OpenClass();;
+				openClass.setCt_name(rs.getString("시설명칭"));
+				openClass.setC_group(rs.getString("강좌분류"));
+				openClass.setC_name(rs.getString("강좌명"));
+				selectClassNameList.add(openClass);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return selectClassNameList;
+	}
+	//텍스트가 있는 경우
+	public ArrayList<OpenClass> selectSearchByText(String centerName, String classSep, String textCN){
+		String sql = " select c.강좌명, c.강좌분류, c.정원, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차"
+				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
+				+ " where oc.강좌코드 = c.강좌코드 "
+				+ " and oc.시설코드 = ci.시설코드 "
+				+ " and oc.강사코드 = t.강사코드 "
+				+ " and oc.회차 = ei.회차 "
+				+ " and ci.시설명칭 LIKE '%'?'%' "
+				+ " and c.강좌분류 LIKE '%'?'%' "
+				+ " and c.강좌명 like '%'?'%'";
+		ArrayList<OpenClass> selectByTextList = null;
+
+		try {
+			connect();
+			selectByTextList = new ArrayList<OpenClass>();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, centerName);
+			psmt.setString(2, classSep);
+			psmt.setString(3, textCN);
+			rs = psmt.executeQuery();
+			while(rs.next()) {
+				OpenClass openClass = new OpenClass();
+				openClass.setC_name(rs.getString("강좌명"));
+				openClass.setC_group(rs.getString("강좌분류"));
+				openClass.setC_personnel(rs.getInt("정원"));
+				openClass.setOc_appliNum(rs.getInt("신청인원"));
+				openClass.setOc_day(rs.getString("수강요일"));
+				openClass.setOc_acceptStart((rs.getDate("접수시작일")).toLocalDate());
+				openClass.setOc_acceptEnd((rs.getDate("접수마감일")).toLocalDate());
+				openClass.setOc_classStart((rs.getDate("강좌시작일")).toLocalDate());
+				openClass.setOc_classEnd((rs.getDate("강좌종료일")).toLocalDate());
+				openClass.setCt_name(rs.getString("시설명칭"));
+				openClass.setEp_useStart(rs.getString("이용시작시간")); //강의 시작시간
+				openClass.setEp_useEnd(rs.getString("이용종료시간"));
+				openClass.setEp_epi(rs.getString("회차"));
+				selectByTextList.add(openClass);
+			}
+
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}return selectByTextList;
+
+
+	}
+
+	//수강요일, 텍스트 모두 있는 경우
+	public ArrayList<OpenClass> selectSearchByAll(String centerName, String classSep, String[] array, String textCN){
+		String sql = "select c.강좌코드, c.강좌명, c.정원, oc.신청인원, ci.시설명칭, t.이름, ei.이용시작시간, ei.이용종료시간, ei.회차"
+				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_tutorinfo t, p_epiinfo ei"
+				+ " where oc.강좌코드 = c.강좌코드"
+				+ " and oc.시설코드 = ci.시설코드"
+				+ " and oc.강사코드 = t.강사코드"
+				+ " and oc.회차 = ei.회차"
+				+ " and ci.시설명칭 like '%'?'%'"
+				+ " and c.강좌분류 like '%'?'%'"
+				+ " and c.강좌명 like '%'?'%'"
+				+ " and regexp_like(oc.수강요일, ?)";
+		ArrayList<OpenClass> selectByAll = null;
+		try {
+			connect();
+			selectByAll = new ArrayList<OpenClass>();
+			psmt.setString(1, centerName);
+			psmt.setString(2, classSep);
+			psmt.setString(3, textCN);
+			String daylist = "";
+			for(int i=0; i<array.length; i++) {
+				if(i == 0) {
+					daylist = array[i];
+				} else {
+					daylist += "" + array[i];
+				}
+			}
+			psmt.setString(4, daylist);
+		}catch(Exception e){
+			e.printStackTrace();
+		}return selectByAll;
+	}
+
+
 }

@@ -1,13 +1,6 @@
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="data.dao.*"%>
 <%@page import="data.dto.*"%>
-<%@page import="data.dao.OpenCenterDao"%>
-<%@page import="data.dao.OpenClassDao"%>
-<%@page import="data.dto.OpenCenter"%>
-<%@page import="data.dao.ClassInfoDao"%>
-<%@page import="data.dao.CenterInfoDao"%>
-<%@page import="data.dto.ClassInfo"%>
-<%@page import="data.dto.CenterInfo"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.time.*"%>
 
