@@ -9,7 +9,7 @@
 <%@page import="data.dto.ClassInfo"%>
 <%@page import="data.dto.CenterInfo"%>
 <%@ page import="java.util.*"%>
-<%@ page import = "java.time.*" %>
+<%@ page import="java.time.*"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -43,26 +43,37 @@
 	  //시설조회
       let centernameArr = []; //센터명을 가져오는 배열
   	  let centerInfoAllArr = []; //centerinfo의 시설명칭, 주요시설, 세부시설을 모두 가져오는 배열
-  	  let centerFacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
+  	  let centerfacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
   	  
    <%CenterInfoDao centerInfoDao = new CenterInfoDao();
-     OpenClassDao openClassDao = new OpenClassDao();
+OpenClassDao openClassDao = new OpenClassDao();
 
-	//강좌조회
-	ArrayList<OpenClass> OpenClassCtNameList = openClassDao.selectCtNameOpenclassList();
-   	ArrayList<OpenClass> OpenClassGroupList = openClassDao.selectGruopOpenclassList();
-  	ArrayList<OpenClass> OpenClassCNameList = openClassDao.selectClassNameList();
-  	  
-  	  
-	//시설조회  	  
-	ArrayList<CenterInfo> CenternameList = centerInfoDao.selectCenternameList();
-	ArrayList<CenterInfo> CenterInfoAllList = centerInfoDao.selectCenterInfoList();
-	ArrayList<CenterInfo> CenterfacNameList = centerInfoDao.selectCenterfcNameList();
+//강좌조회
+ArrayList<OpenClass> OpenClassCtNameList = openClassDao.selectCtNameOpenclassList();
+ArrayList<OpenClass> OpenClassGroupList = openClassDao.selectGruopOpenclassList();
+ArrayList<OpenClass> OpenClassCNameList = openClassDao.selectClassNameList();
+
+//시설조회  	  
+ArrayList<CenterInfo> CenternameList = centerInfoDao.selectCenternameList();
+ArrayList<CenterInfo> CenterInfoAllList = centerInfoDao.selectCenterInfoList();
+ArrayList<CenterInfo> CenterfacNameList = centerInfoDao.selectCenterfcNameList();
+
+//강좌조회
+for (OpenClass ocGroup : OpenClassGroupList) {%>	  	  	
+	openClassGroupArr = [...openClassGroupArr, 
+  	 {"시설명칭":'<%=ocGroup.getCt_name()%>', "강좌분류":'<%=ocGroup.getC_group()%>'}];  	  			  
+	<%}
+
+//센터정보 중 시설명칭과 주요시설만 배열에 저장함
+for (OpenClass ocCName : OpenClassCNameList) {%>	  	  	
+	openClasssCNameArr = [...openClasssCNameArr, 
+  	 {"시설명칭":'<%=ocCName.getCt_name()%>', "강좌분류":'<%=ocCName.getC_group()%>', "강좌명":'<%=ocCName.getC_name()%>'}];  	  			  
+	<%}
 
 //센터명을 배열에 저장함
 for (CenterInfo ci : CenternameList) {%>
 	
-		centerNameArr = [...centerNameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
+		centernameArr = [...centernameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
 	     
 	      <%}%> 
 	  
@@ -82,59 +93,77 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 	  		  			{"시설명칭":'<%=ci.getCt_name()%>', "주요시설":'<%=ci.getCt_facName()%>', "세부시설":'<%=ci.getCt_facKind()%>'}];
 	  		  		
 	  		  	      <%}%>  
-	  		  	      	  	      
+	      	  	      
    </script>
+
 	<div class="container">
 		<div id="form1">
 			<p style="text-align: center;">강좌 조회</p>
 			<div class="d-flex flex-column mb-3">
-				<form>
+				<form name="ReservationClassForm">
 					<div class="p-2">
-						<label for="inputState">센터명 <select class="form-select"
-							id="centerNameSelect">
-								<option value="전체보기">전체보기</option>
-								<option value="북부스포츠센터">북부스포츠센터</option>
-								<option value="종합운동장">종합운동장</option>
-								<option value="기타">기타</option>
+						<label for="inputState">센터명
+							<select class="form-select"
+								id="clctName" name="clctName" onchange="selectcGroup()">
+									<option selected>센터명을 선택하세요.</option>
+									<%
+									if (OpenClassCtNameList != null && OpenClassCtNameList.size() > 0) {
+										for (OpenClass ocName : OpenClassCtNameList) {
+									%>
+									<option name="opCtName" value=<%=ocName.getCt_name()%>>
+										<%=ocName.getCt_name()%></option>
+									<%
+									}
+									}
+									%>
+							</select>
+						</label>
+					</div>
+					<div class="p-2">
+						<label for="inputState">카테고리<select class="form-select"
+							name="cGroup" id="cGroup">
+								<option selected>카테고리를 선택하세요.</option>
 						</select>
 						</label>
 					</div>
-
-
 					<div class="p-2">
-						<label for="inputState">카테고리 <select class="form-select">
-								<option selected>전체보기</option>
-								<option>...</option>
-						</select>
+						<label for="inputState">수강요일 <br /> 
+							<label class="form-check-label">
+								<input class="form-check-input" type="checkbox" name="selDay" id="selMon" value="월" >
+								월
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selTue" value="화" >
+								화
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selWed" value="수" >
+								수
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selThu" value="목" >
+								목
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selFri" value="금" >
+								금
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selSat" value="토" >
+								토
+							</label> 
+							<label class="form-check-label" >
+								<input class="form-check-input" type="checkbox" name="selDay" id="selSun" value="일" >
+								일
+							</label> 
+					</div>
+					<div class="p-2">
+						<label for="inputState">강좌명 
+						<input type="text" id="textCN"
+							name="textCN" placeholder="강좌명을 검색해보세요!">
 						</label>
 					</div>
-					<!-- <div class="p-2">
-						<label for="inputState">시간 <select class="form-select">
-								<option selected>전체보기</option>
-								<option>...</option>
-						</select>
-						</label>
-					</div> -->
-					<div class="p-2">
-						<label for="inputState">수강요일 <br /> <input
-							class="form-check-input" type="checkbox" value="월" id="mon">
-							<label class="form-check-label" for="mon"> 월</label> <input
-							class="form-check-input" type="checkbox" value="화" id="tue">
-							<label class="form-check-label" for="tue"> 화</label> <input
-							class="form-check-input" type="checkbox" value="수" id="wed">
-							<label class="form-check-label" for="wed"> 수</label> <input
-							class="form-check-input" type="checkbox" value="목" id="thu">
-							<label class="form-check-label" for="thu"> 목</label> <input
-							class="form-check-input" type="checkbox" value="금" id="fri">
-							<label class="form-check-label" for="fri"> 금</label>
-						</label>
-
-					</div>
-					<div class="p-2">
-						<label for="inputState">강좌명 <input type="text" value="">
-						</label>
-					</div>
-					<button type="submit">조회하기</button>
+					<button type="submit" id='serchBtn'>조회하기</button>
 				</form>
 			</div>
 		</div>
@@ -144,8 +173,7 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 			<div class="d-flex flex-column mb-3">
 				<form name="CenterSelectForm">
 					<div class="p-2">
-						<label for="inputState">센터명 
-						<select class="form-select"
+						<label for="inputState">센터명 <select class="form-select"
 							id="centerName" name="centerName" onchange="selectCtName()">
 								<option selected>센터명을 선택하세요</option>
 								<%
@@ -165,69 +193,106 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 						</label>
 					</div>
 					<div class="p-2">
-						<label for="inputState">시설명 
-							<select class="form-select"
+						<label for="inputState">시설명 <select class="form-select"
 							id="facilityName" name="facilityName" onchange="selectfcKind()">
 								<option selected>시설명을 선택하세요</option>
-							</select>
+						</select>
 						</label>
 					</div>
 					<div class="p-2">
-						<label for="inputState">세부시설 
-						<select class="form-select"
+						<label for="inputState">세부시설 <select class="form-select"
 							id="facilityKind" name="facilityKind">
 								<option selected>시설명을 선택하세요</option>
 						</select>
 						</label>
 					</div>
 					<div class="p-2">
-						<label for="inputState">예약일자 
-							<select id = "cenYear" name="cenYear">
+						<label for="inputState">예약일자 <select id="cenYear"
+							name="cenYear">
 								<option value="년도" selected>년도</option>
 								<option value="2022">2022년</option>
-							</select> 
-							<select id = "cenMonth" name="cenMonth">
+						</select> <select id="cenMonth" name="cenMonth">
 								<option value="월" selected>월</option>
 								<option value="11">11월</option>
-							</select> 
-							<select id = "cenDay" name="cenDay">
+						</select> <select id="cenDay" name="cenDay">
 								<option value="일" selected>일</option>
 								<%
 								LocalDate now = LocalDate.now();
-																
+
 								OpenCenterDao openCenterDao = new OpenCenterDao();
 								ArrayList<OpenCenter> revAvaList = openCenterDao.selectOpenCenterRevAva();
-								
+
 								if (revAvaList != null && revAvaList.size() > 0) {
 									for (OpenCenter oct : revAvaList) {
 										//예약마감일자가 현재시간보다 뒤여야 하므로 작성한 조건문
-										if(oct.getOct_revPeri().isAfter(now)){ 
+										if (oct.getOct_revPeri().isAfter(now)) {
 								%>
 
-								<option name="avaPeri" id="avaPeri" value=<%=oct.getOct_avaPeri().getDayOfMonth()%>>
+								<option name="avaPeri" id="avaPeri"
+									value=<%=oct.getOct_avaPeri().getDayOfMonth()%>>
 									<%=oct.getOct_avaPeri().getDayOfMonth()%>일
 								</option>
 
 								<%
-										}
+								}
 								}
 								}
 								%>
-							</select>
-						</label>
-						<br/>
-							<p>*예약은 최소 2일전까지 가능합니다
+						</select>
+						</label> <br />
+						<p>*예약은 최소 2일전까지 가능합니다
 					</div>
-					<button type="submit" id = "centerSelBtn">조회하기</button>
+					<button type="submit" id="centerSelBtn">조회하기</button>
 				</form>
 			</div>
 		</div>
 	</div>
 
-	
+
 	<script>
+	 function selectcGroup(){
+		    var name = document.getElementById("clctName");  
+		    var value = name.options[name.selectedIndex].value; 
+		    
+		    let cGruopE = document.getElementById("cGroup");   
+		    	cGruopE.options.length = 0;  
+		        let optionList = document.createElement('option');
+		        optionList.innerText = "카테고리를 선택하세요.";
+		        cGruopE.append(optionList); 
+		        
+		        for (var i = 0; i < openClassGroupArr.length; i++) {
+		           if(value == openClassGroupArr[i].시설명칭){
+		               let option = document.createElement('option');              
+		               option.innerText = openClassGroupArr[i].강좌분류;             
+		               cGruopE.append(option);
+		           }
+		        }     
+		 };
+		 
+		 
+	 document.getElementById('serchBtn').addEventListener('click', (e)=> {
+			e.preventDefault();
+			let form = document.ReservationClassForm;
+			
+		 	if(form.clctName.value == "센터명을 선택하세요."){
+				alert("센터명을 선택해주세요!");
+				return false;		
+			}else if(form.cGroup.value == "카테고리를 선택하세요."){
+				alert("카테고리를 선택해주세요!");
+				return false;		
+			}else{
+				form.action = 'MainClassSelect_proc.jsp';
+				form.submit();	
+				console.log("완벽해요ㅠ");
+			}
+		});
+	
+	
+	
+	
 	//주요시설 조회
    function selectCtName(){
+			 
       var name = document.getElementById("centerName"); 
       var value = name.options[name.selectedIndex].value; 
 

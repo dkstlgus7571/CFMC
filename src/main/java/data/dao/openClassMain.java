@@ -23,11 +23,11 @@ public class openClassMain {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		OpenClassDao openClassDao = new OpenClassDao();
-
-		ArrayList<OpenClass> ctNameOpenClassList = openClassDao.selectCtNameOpenclassList();
 		
-		ArrayList<OpenClass> groupOpenClassList = openClassDao.selectGruopOpenclassList();
+		
+		
 	}
 
 }
+
+

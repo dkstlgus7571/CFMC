@@ -101,7 +101,8 @@
 				<input type="hidden"
 				name="facName" value="<%=openCenter.getCt_facName()%>"> 
 				<input type="hidden" name="facKind" value="<%=openCenter.getCt_facKind()%>">
-			<input type="hidden" name="avaPeri"> <input type="hidden"
+			<input type="hidden" name="avaPeriod"> 
+			<input type="hidden"
 				name="epi">
 			<button id="revCenterBtn" type="submit">예약하기</button>
 		</form>
@@ -133,10 +134,9 @@
 
 	     	let form = document.chooseRevCt;
 	     	
-	     	form.avaPeri.value = selectedArr.substring(0,10);
+	     	form.avaPeriod.value = selectedArr.substring(0,10).toString();
 	     	form.epi.value = selectedArr.substring(10);
 
-	     	console.log("예약폼으로 넘어갑니다!");
 	     	form.action="CFMCMain_Select.jsp";
 	    	form.method="post";
 	    	form.submit();
