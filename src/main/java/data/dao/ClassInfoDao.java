@@ -222,5 +222,5 @@ public class ClassInfoDao {
 			disConnect();
 		}
 	}
-
 }
+

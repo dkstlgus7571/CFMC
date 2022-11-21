@@ -14,8 +14,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import data.dto.CenterInfo;
 import data.dto.ClassInfo;
-import data.dto.MemberInfo;
 import data.dto.OpenClass;
 
 public class openClassMain {
