@@ -13,9 +13,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import data.dto.CenterInfo;
 import data.dto.OpenClass;
-
 
 public class OpenClassDao {
 	Connection conn = null;
@@ -50,6 +48,6 @@ public class OpenClassDao {
 			e.printStackTrace();
 		}
 	}
-
+	
 	
 }
