@@ -10,7 +10,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="CFMCMain.css">
 
-<title>Insert title here</title>
+<title>로그인</title>
 </head>
 <body>
 <script

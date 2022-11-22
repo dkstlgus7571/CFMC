@@ -25,4 +25,3 @@
 # Package Files #
 #*.jar
 *.war
-/build/

@@ -1,16 +1,7 @@
-<%@page import="java.time.LocalDateTime"%>
 <%@page import="data.dao.*"%>
 <%@page import="data.dto.*"%>
-<%@page import="data.dao.OpenCenterDao"%>
-<%@page import="data.dao.OpenClassDao"%>
-<%@page import="data.dto.OpenCenter"%>
-<%@page import="data.dao.ClassInfoDao"%>
-<%@page import="data.dao.CenterInfoDao"%>
-<%@page import="data.dto.ClassInfo"%>
-<%@page import="data.dto.CenterInfo"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.time.*"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -24,7 +15,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="CFMCMain.css">
 <meta charset="UTF-8">
-<title>CFMC Main Page</title>
+<title>CFMC 메인 페이지</title>
 </head>
 <body>
 	<!-- JavaScript Bundle with Popper -->
@@ -46,7 +37,7 @@
   	  let centerfacNameArr = []; //cenerinfo의 시설명칭, 주요시설만 골라 가져오는 배열
   	  
    <%CenterInfoDao centerInfoDao = new CenterInfoDao();
-OpenClassDao openClassDao = new OpenClassDao();
+	 OpenClassDao openClassDao = new OpenClassDao();
 
 //강좌조회
 ArrayList<OpenClass> OpenClassCtNameList = openClassDao.selectCtNameOpenclassList();
@@ -73,7 +64,7 @@ for (OpenClass ocCName : OpenClassCNameList) {%>
 //센터명을 배열에 저장함
 for (CenterInfo ci : CenternameList) {%>
 	
-		centernameArr = [...centernameArr, '<%=ci.getCt_name()%>']; /*배열을 복사함!  */
+		centernameArr = [...centernameArr, '<%=ci.getCt_name()%>'];
 	     
 	      <%}%> 
 	  
@@ -160,7 +151,7 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 					<div class="p-2">
 						<label for="inputState">강좌명 
 						<input type="text" id="textCN"
-							name="textCN" placeholder="강좌명을 검색해보세요!">
+							name="textCN" placeholder="강좌명을 검색하세요!">
 						</label>
 					</div>
 					<button type="submit" id='serchBtn'>조회하기</button>
@@ -220,11 +211,14 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 								LocalDate now = LocalDate.now();
 
 								OpenCenterDao openCenterDao = new OpenCenterDao();
+								
+								//이용가능일자와 예약마감일자를 출력하는 메소드
 								ArrayList<OpenCenter> revAvaList = openCenterDao.selectOpenCenterRevAva();
 
 								if (revAvaList != null && revAvaList.size() > 0) {
 									for (OpenCenter oct : revAvaList) {
-										//예약마감일자가 현재시간보다 뒤여야 하므로 작성한 조건문
+										//예약마감일자가 현재시간보다 뒤여야 하므로 작성한 조건문 - 예약마감일자가 지났을경우
+										//이용가능일자 및 예약마감일자는 출력되지 않음
 										if (oct.getOct_revPeri().isAfter(now)) {
 								%>
 
@@ -248,9 +242,8 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 		</div>
 	</div>
 
-
 	<script>
-	 function selectcGroup(){
+	 function selectcGroup(){ //센터명 선택 시, 해당 센터에 맞는 강좌 카테고리(강좌분류)가 나오게 하는 함수
 		    var name = document.getElementById("clctName");  
 		    var value = name.options[name.selectedIndex].value; 
 		    
@@ -269,7 +262,7 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 		        }     
 		 };
 		 
-		 
+	 //강좌 조회 버튼 누를 때의 이벤트리스너
 	 document.getElementById('serchBtn').addEventListener('click', (e)=> {
 			e.preventDefault();
 			let form = document.ReservationClassForm;
@@ -281,16 +274,16 @@ for (CenterInfo ci : CenterInfoAllList) {%>
 				alert("카테고리를 선택해주세요!");
 				return false;		
 			}else{
+				 console.log("강좌조회 폼 넘어갑니다");
 				form.action = 'MainClassSelect_proc.jsp';
+				form.method="post";
 				form.submit();	
-				console.log("완벽해요ㅠ");
 			}
 		});
 	
 	
 	
-	
-	//주요시설 조회
+	//주요시설 조회시, 센터명을 선택하면 해당 센터명에 맞는 시설명만 나오게 함+센터명 다시 선택시 세부시설까지 초기화됨
    function selectCtName(){
 			 
       var name = document.getElementById("centerName"); 
@@ -328,11 +321,9 @@ for (CenterInfo ci : CenterInfoAllList) {%>
                  facName1.append(option);
              }
           } 
-        
    }
    
-	
-   //세부시설 조회
+   //세부시설 조회시, 시설명을 선택하면 해당 시설명에 맞는 세부시설명만 나오게 함+시설명 다시 선택시 선택 초기화됨
    function selectfcKind(){
       var name = document.getElementById("centerName"); //주요시설 저장 value
       var value = name.options[name.selectedIndex].value; 
@@ -358,16 +349,13 @@ for (CenterInfo ci : CenterInfoAllList) {%>
              
              fackind2.append(optionList);
         	}
-        	 }else{
-        	 console.log("시설명칭 확인 필요");
-         }
+        	 }
       }  
              
    }
    
-   //시설조회 폼 버튼 이벤트리스너
+   //시설조회 버튼 이벤트리스너
    document.getElementById('centerSelBtn').addEventListener('click', (e)=>{
-       //click했을 때 수행할 내용 작성
        e.preventDefault();
        
        let form = document.CenterSelectForm;
@@ -381,7 +369,7 @@ for (CenterInfo ci : CenterInfoAllList) {%>
     	   alert('예약일자를 다시 선택하세요.');
     	   return false;
        }else{
-    	   console.log("폼 넘어갑니다");
+    	   console.log("시설조회 폼 넘어갑니다");
     	   form.action="MainCenterSelect_proc.jsp";
     	   form.method="post"; //post 방식으로 수정하면 url에 파라미터값이 뜨지 않음!
     	   form.submit();

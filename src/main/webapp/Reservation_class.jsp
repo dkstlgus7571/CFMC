@@ -1,17 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="data.dao.OpenClassDao"%>
-<%@ page import="data.dto.OpenClass"%>
-<%@ page import="data.dao.CenterInfoDao"%>
-<%@ page import="data.dto.CenterInfo"%>
-<%@ page import="data.dao.OpenCenterDao"%>
-<%@ page import="data.dto.OpenCenter"%>
+<%@ page import="data.dao.*"%>
+<%@ page import="data.dto.*"%>
 <%@ page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>강좌 신청 페이지</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"

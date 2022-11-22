@@ -10,7 +10,7 @@
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="CFMCMain.css">
 
-<title>Insert title here</title>
+<title>회원가입</title>
 </head>
 <body>
 <script
@@ -30,7 +30,7 @@
 					<input type="text" class="form-control" placeholder="이름" name="userName" maxlength="20">
 				</div>
 				<div class="form-group">
-					<input type="number" class="form-control" placeholder="생년월일" name="userBirth" maxlength="8">
+					<input type="number" class="form-control" placeholder="생년월일" name="userBirth"  maxlength="8">
 				</div>
 				<div class="form-group">
 					<input type="tel" class ="form-control" placeholder="전화번호" name="userTel" maxlength="11">

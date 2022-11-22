@@ -17,7 +17,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="CFMCMain.css">
 <meta charset="UTF-8">
-<title>조회완료 페이지</title>
+<title>강좌 조회 완료</title>
 </head>
 <body>
 	<!-- JavaScript Bundle with Popper -->
@@ -42,29 +42,20 @@
 	//객체 생성 -> 넘어온 파라미터로 set
 	//그 객체를 매개변수로 넘기는 메소드(select)를 작성해서 값을 받아와서 출력하면 되겠다! ! ! 
 	OpenClass openClass = new OpenClass();
-	
 	OpenClassDao openClassDao = new OpenClassDao();
 	
 	ArrayList<OpenClass> openClassList = new ArrayList<OpenClass>();
-	if(selDay != null){ //selday 있는 경우
-		if(textCN.equals("")){ //textCN 없는 경우 - selday만 있음!
-			openClassList = openClassDao.selectSearchBySelDay(clctName, cGroup, selDay);
-		}else{ //둘 다 있는 경우
-			openClassList = openClassDao.selectSearchByAll(clctName, cGroup, selDay, textCN);
-		}
-	}
 	
-	if(!textCN.equals("")){//textCN 있는 경우
-		if(selDay == null){ //textCN만 있는 경우
-			openClassList = openClassDao.selectSearchByText(clctName, cGroup, textCN);
-		}else{//둘 다 있는 경우
-			openClassList = openClassDao.selectSearchByAll(clctName, cGroup, selDay, textCN);
-		}
-	}
-	
-	if(selDay == null && textCN.equals("")){ //둘 다 없을 경우
+	if(selDay != null && !textCN.equals("")){ //selday, textCN이 둘 다 있는 경우
+		openClassList = openClassDao.selectSearchByAll(clctName, cGroup, selDay, textCN);
+	}else if(selDay != null && textCN.equals("")){ //selday만 있는 경우
+		openClassList = openClassDao.selectSearchBySelDay(clctName, cGroup, selDay);
+	}else if(selDay == null && !textCN.equals("")){ //textCN만 있는 경우
+		openClassList = openClassDao.selectSearchByText(clctName, cGroup, textCN);
+	}else{ //둘 다 없는 경우(기본 조건only)
 		openClassList = openClassDao.selectAllList(clctName, cGroup);
 	}
+	
 	%>
 	
 	<jsp:include page="CFMCMain.jsp" />
@@ -122,12 +113,12 @@
 				<button id="regClsBtn" type="submit">예약하기</button>
 		</form>
 	</div>
-	<% }else{ //다시 조회페이지로 이동하기
+	<% }else{ //예약가능 데이터 x 다시 조회페이지로 이동하기
 		%>
 	<script>
-		alert("예약가능한 강좌가 없습니다!");
+		alert("신청 가능한 강좌가 없습니다!");
 		location.href="CFMCMain.jsp";
-		</script>
+	</script>
 	<%	}%>
 
 
@@ -138,12 +129,11 @@
 	       const query = 'input[name="classinfoAll"]:checked'; //체크된 목록 쿼리문
 	       const selectedEls = document.querySelector(query); // 쿼리문을 실행해 체크된 요소를 모두 가져옴
 	       
-	       /*1. 체크박스가 선택이 안 되었을 때 alert 창  뜨는 코드*/
+	       /* 체크박스가 선택이 안 되었을 때 alert 창  뜨는 코드 */
 	       if(document.querySelector(query) == null){
-	    	   alert("예약시간을 선택해주세요!");
+	    	   alert("신청할 강좌를 선택해주세요!");
 	    	   return false;
 	       }else{
-	       
 	       let selectedCb = 0;
 	       selectedCb = selectedEls.value;
 
@@ -157,7 +147,6 @@
 	    	form.submit();
 	       }
 	});
-	
 	
 		function checkOnlyOne(element) { //체크박스 중복 막아둠(라디오박스!)
 		  

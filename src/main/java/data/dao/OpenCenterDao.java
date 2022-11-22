@@ -45,52 +45,8 @@ public class OpenCenterDao {
 			e.printStackTrace();
 		}
 	}
-
-	//select join info from p_centerinfo, opencenter
-	public ArrayList<OpenCenter> selectOpenCenter(){
-		String ctInfoListSql =  "select ct.시설명칭, ct.주요시설, ct.세부시설, oc.예약마감일자, oc.이용가능일자, oc.예약가능여부"
-				+ " ,ct.주소, ct.시설전화번호, oc.회차 "
-				+ " from p_centerinfo ct, p_opencenter oc "
-				+ " where ct.시설코드 = oc.시설코드";
-		ArrayList<OpenCenter> openCenterList = null;
-
-		try {
-			connect();
-
-			psmt = conn.prepareStatement(ctInfoListSql);
-			rs = psmt.executeQuery();
-
-			openCenterList = new ArrayList<OpenCenter>();
-
-
-			while(rs.next()) {
-				OpenCenter opencenter = new OpenCenter();
-
-				opencenter.setCt_name(rs.getString("시설명칭"));
-				opencenter.setCt_facName(rs.getString("주요시설"));
-				opencenter.setCt_facKind(rs.getString("세부시설"));
-				opencenter.setOct_revPeri(rs.getDate("예약마감일자").toLocalDate());
-				opencenter.setOct_avaPeri(rs.getDate("이용가능일자").toLocalDate());
-				opencenter.setOct_revAva(rs.getString("예약가능여부"));
-				opencenter.setCt_address(rs.getString("주소"));
-				opencenter.setCt_tel(rs.getString("시설전화번호"));
-				opencenter.setOct_epi(rs.getString("회차"));
-
-
-				openCenterList.add(opencenter);
-			}
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			disConnect();
-		}
-		return openCenterList;
-	}
-
 	
-	//select revPeri, avaPeri
+	//select revPeri, avaPeri -> 이용가능시설 테이블의 이용가능일자와 예약마감일자를 출력하는 메소드(조회시 이용)
 	public ArrayList<OpenCenter> selectOpenCenterRevAva(){
 		String Sql =  "select distinct 이용가능일자, 예약마감일자 from p_opencenter order by 이용가능일자";
 		
@@ -123,8 +79,8 @@ public class OpenCenterDao {
 	}
 
 
-	//select oc info
-	public ArrayList<OpenCenter> printSelectCenterInfo(OpenCenter oct){
+	//select oc info -> 시설명칭, 주요시설, 세부시설, 이용가능일자를 입력받아 시설의 정보를 출력함(조회시 이용)
+	public ArrayList<OpenCenter> printSelectCenterInfo(String centerName, String facilityName, String facilityKind, String cenDate){
 		String Sql =  "select c.시설코드 , c.시설명칭, c.주요시설, c.세부시설, oc.이용가능일자, oc.예약가능여부, ei.회차, ei.이용시작시간, ei.이용종료시간 "
 				+ " from p_openCenter oc, p_centerInfo c, p_epiInfo ei "
 				+ " where oc.시설코드 = c.시설코드 "
@@ -132,14 +88,12 @@ public class OpenCenterDao {
 				+ " AND c.시설명칭 = ? "
 				+ " AND c.주요시설 = ? "
 				+ " AND c.세부시설 = ? "
-				+ " AND oc.이용가능일자 = TO_DATE(?, 'YY-MM-DD')  "
+				+ " AND oc.이용가능일자 = TO_DATE(?, 'YY-MM-DD') "
 				+ " AND oc.예약가능여부 = 'Y'"
-				+ " ORDER BY oc.이용가능일자, oc.회차"
-				;
+				+ " ORDER BY oc.이용가능일자, oc.회차";
 
 		OpenCenter openCenter = null;
 		ArrayList<OpenCenter> openCenterList = null;
-		
 		
 		try {
 			connect();
@@ -148,10 +102,10 @@ public class OpenCenterDao {
 
 			psmt = conn.prepareStatement(Sql);
 			
-			psmt.setString(1, oct.ct_name); //시설명칭
-			psmt.setString(2, oct.ct_facName); //주요시설
-			psmt.setString(3, oct.ct_facKind); //세부시설
-			psmt.setString(4, oct.oct_avaPeri.toString()); //이용가능일자
+			psmt.setString(1, centerName); //시설명칭
+			psmt.setString(2, facilityName); //주요시설
+			psmt.setString(3, facilityKind); //세부시설
+			psmt.setString(4, cenDate); //이용가능일자
 			
 			rs = psmt.executeQuery();
 
@@ -177,8 +131,10 @@ public class OpenCenterDao {
 		}
 		
 		return openCenterList;
-		
 	}	
+
+	
+	//시설명칭, 주요시설, 세부시설, 이용가능일자, 회차를 입력받아 시설의 정보를 출력함(예약창에서 이용)
 	public ArrayList<OpenCenter> ReserCenter(OpenCenter oct){
 		String Sql =  "select c.시설코드 , c.시설명칭, c.주요시설, c.세부시설, oc.이용가능일자, oc.예약마감일자, "
 				+ " c.주소, c.시설전화번호, ei.회차, ei.이용시작시간, ei.이용종료시간,oc.예약가능여부 "
@@ -193,7 +149,6 @@ public class OpenCenterDao {
 
 		OpenCenter openCenter = null;
 		ArrayList<OpenCenter> reservationDetailList = null;
-		
 		
 		try {
 			connect();
