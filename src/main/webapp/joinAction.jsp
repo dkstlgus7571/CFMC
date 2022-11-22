@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="data.dao.MemberInfoDao" %>
+<%@ page import="data.dao.*" %>
+
 <%@ page import="java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:useBean id="user" class="data.dto.MemberInfo" scope="page" />
@@ -36,7 +37,7 @@
 			}
 			else  {
 				PrintWriter script = response.getWriter();
-				script.println("<script>");
+				script.println("<script>");				
 				script.println("location.href = 'CFMCMain.jsp'");
 				script.println("</script>");
 			}	
