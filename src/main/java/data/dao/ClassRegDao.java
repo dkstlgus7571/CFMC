@@ -7,12 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import data.dto.CenterRent;
-import data.dto.OpenCenter;
-
-public class CenterRentDao {
+public class ClassRegDao {
 	Connection conn = null;
 	PreparedStatement psmt = null;
 	ResultSet rs = null;
@@ -49,18 +45,18 @@ public class CenterRentDao {
 			e.printStackTrace();
 		}
 	}
-	public void procedure_centerrent_save(int memcode, String ctcode, Date avaperi, String epi){
-		String procedureSql = "{call centerrent_save(?,?,?,?)}";
-
+	
+	
+	public void procedure_openclass_save(int memcode, int occode){
+		String procedureSql = "{call openclass_save(?,?)}";
 		try {
 			connect();
 
 			cstmt = conn.prepareCall(procedureSql);
 			
 			cstmt.setInt(1, memcode);
-			cstmt.setString(2, ctcode);
-			cstmt.setDate(3,avaperi);
-			cstmt.setString(4, epi);
+			cstmt.setInt(2, occode);
+
 			
 			rs = cstmt.executeQuery();
 

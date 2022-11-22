@@ -97,7 +97,6 @@
 					int checkboxV = 0;
 				for(int i = 0; i<openClassList.size(); i++){ 
 					checkboxV = openClassList.get(i).ocCode;
-/* 					out.println(openClassList.get(i)); */
 
 				%>
 					<th scope="row">
@@ -119,6 +118,7 @@
 		</table>
 			<form name="chooseRegCls" id="chooseRegCls">
 				<input type="hidden" name="clsctName"> 
+
 				<button id="regClsBtn" type="submit">예약하기</button>
 		</form>
 	</div>
@@ -149,10 +149,10 @@
 
 	     	let form = document.chooseRegCls;
 	     	
-	     	form.clsctName.value = selectedCb;
+	     	form.clsctName.value = selectedCb.toString();
 
 	     	console.log("예약폼으로 넘어갑니다!");
-	     	form.action="CFMCMain_Select.jsp";
+	     	form.action="Reservation_class.jsp";
 	    	form.method="post";
 	    	form.submit();
 	       }

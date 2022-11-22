@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="data.dto.MemberInfo"%>
 <%@ page import="data.dao.MemberInfoDao"%>
 <%@ page import="java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
@@ -24,7 +25,10 @@
 			script.println("<script>");
 			session.setAttribute("MEMBERID", userId);
 			session.setAttribute("MEMBERPW", pass);
-
+			MemberInfo meminfo = new MemberInfo();
+			meminfo = memDao.myInfo(mem);
+			int mcode = meminfo.getmCode();
+			session.setAttribute("MEMCODE", mcode);
 			session.setAttribute("memPw", pass);
 			script.println("location.href = 'CFMCMain.jsp'");
 			script.println("</script>");
