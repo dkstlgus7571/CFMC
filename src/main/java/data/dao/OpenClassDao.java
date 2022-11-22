@@ -143,7 +143,7 @@ public class OpenClassDao {
 
 	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)만 받는 경우
 	public ArrayList<OpenClass> selectAllList(String clctName, String cGroup){
-		String cNameSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차"
+		String cNameSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, NVL(oc.수강요일, '-') as \"수강요일\", oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차"
 				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
 				+ " where oc.강좌코드 = c.강좌코드 "
 				+ " and oc.시설코드 = ci.시설코드 "
@@ -201,7 +201,7 @@ public class OpenClassDao {
 
 	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+수강요일이 있는 경우
 	public ArrayList<OpenClass> selectSearchBySelDay(String clctName, String cGroup, String[] selDay){
-		String cNameSql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
+		String cNameSql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, NVL(oc.수강요일, '-') as \"수강요일\", oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 				+ "	from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
 				+ " where oc.강좌코드 = c.강좌코드 "
 				+ " and oc.시설코드 = ci.시설코드 "
@@ -270,7 +270,7 @@ public class OpenClassDao {
 
 	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+텍스트가 있는 경우
 	public ArrayList<OpenClass> selectSearchByText(String centerName, String classSep, String textCN){
-			String sql =  " select distinct c.강좌명, c.강좌분류, c.정원, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
+			String sql =  " select distinct c.강좌명, c.강좌분류, c.정원, oc.신청인원, NVL(oc.수강요일, '-') as \"수강요일\", oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 					+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
 					+ " where oc.강좌코드 = c.강좌코드 "
 					+ " and oc.시설코드 = ci.시설코드 "
@@ -324,7 +324,7 @@ public class OpenClassDao {
 	
 	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+수강요일+텍스트가 모두 있는 경우
 	public ArrayList<OpenClass> selectSearchByAll(String centerName, String classSep, String[] array, String textCN){
-		String sql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
+		String sql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, NVL(oc.수강요일, '-') as \"수강요일\", oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 				+ "	from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
 				+ " where oc.강좌코드 = c.강좌코드"
 				+ " and oc.시설코드 = ci.시설코드"
@@ -390,7 +390,7 @@ public class OpenClassDao {
 	}
 	
 	public ArrayList<OpenClass> openclassAllList(OpenClass oc){
-		String openclassALlSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, "
+		String openclassALlSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, NVL(oc.수강요일, '-') as \"수강요일\", oc.접수시작일, oc.접수마감일, "
 				+ " oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ci.주요시설, ci.세부시설, ci.주소, NVL(c.준비물,'-') as\"준비물\",  "
 				+ " ei.이용시작시간, ei.이용종료시간, ei.회차, tt.강사코드, tt.이름, NVL(c.강좌소개, '-') as\"강좌소개\", oc.강좌코드"
 				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei, p_tutorinfo tt "
