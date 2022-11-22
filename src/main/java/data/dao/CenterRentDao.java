@@ -49,6 +49,9 @@ public class CenterRentDao {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	//프로시저 수행 - 회원코드, 시설코드, 이용가능일자, 회차를 매개변수로 받아 프로시저를 실행함. 프로시저 실행 시 시설예약정보가 DB에 넘어감
 	public void procedure_centerrent_save(int memcode, String ctcode, Date avaperi, String epi){
 		String procedureSql = "{call centerrent_save(?,?,?,?)}";
 		

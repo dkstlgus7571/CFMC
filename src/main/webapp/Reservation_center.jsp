@@ -1,18 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="data.dao.CenterInfoDao"%>
-<%@ page import="data.dto.CenterInfo"%>
-<%@ page import="data.dao.OpenCenterDao"%>
-<%@ page import="data.dto.OpenCenter"%>
+<%@ page import="data.dao.*"%>
+<%@ page import="data.dto.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.time.*"%>
-<%@ page import="java.time.format.DateTimeFormatter"%>
 <% request.setCharacterEncoding("UTF-8");%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>시설 예약 페이지</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"

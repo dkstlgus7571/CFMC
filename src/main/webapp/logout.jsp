@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv = "Content-type" content = "text/html"; charset="UTF-8">
-<title>JSP 게시판</title>
+<title>로그아웃</title>
 </head>
 <body>
 <%

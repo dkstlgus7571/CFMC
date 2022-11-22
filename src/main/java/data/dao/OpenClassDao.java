@@ -51,6 +51,8 @@ public class OpenClassDao {
 		}
 	}
 
+	
+	//OPENCLASS의 시설명칭을 중복없이 출력하는 메소드
 	public ArrayList<OpenClass> selectCtNameOpenclassList(){
 		String ctNameSql =  "select distinct cti.시설명칭 "
 				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti where oc.강좌코드 = ci.강좌코드 and oc.시설코드 = cti.시설코드";
@@ -80,6 +82,7 @@ public class OpenClassDao {
 		return selectCtNameOpenclassList;
 	}   
 
+	//센터명과 맞는 강좌분류를 출력하는 메소드
 	public ArrayList<OpenClass> selectGruopOpenclassList(){
 		String groupSql =  "select distinct cti.시설명칭, ci.강좌분류"
 				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti where oc.강좌코드 = ci.강좌코드 and oc.시설코드 = cti.시설코드";
@@ -109,6 +112,7 @@ public class OpenClassDao {
 		return selectGruopOpenclassList;
 	}
 
+	//센터명, 강좌분류에 맞는 강좌명을 출력하는 메소드
 	public ArrayList<OpenClass> selectClassNameList(){
 		String cNameSql =  "select distinct cti.시설명칭, ci.강좌분류, ci.강좌명"
 				+ " from p_classinfo ci, p_openclass oc , p_centerinfo cti "
@@ -120,7 +124,6 @@ public class OpenClassDao {
 
 			psmt = conn.prepareStatement(cNameSql);
 			rs = psmt.executeQuery();
-
 
 			selectClassNameList = new ArrayList<OpenClass>();
 			while(rs.next()) {
@@ -140,7 +143,7 @@ public class OpenClassDao {
 		return selectClassNameList;
 	}
 
-	//모든 경우(기본 값만 받는 경우)
+	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)만 받는 경우
 	public ArrayList<OpenClass> selectAllList(String clctName, String cGroup){
 		String cNameSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차"
 				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
@@ -198,7 +201,7 @@ public class OpenClassDao {
 	}
 
 
-	//수강요일이 있는 경우
+	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+수강요일이 있는 경우
 	public ArrayList<OpenClass> selectSearchBySelDay(String clctName, String cGroup, String[] selDay){
 		String cNameSql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 				+ "	from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
@@ -209,8 +212,7 @@ public class OpenClassDao {
 				+ " and c.강좌분류 LIKE  '%'||?||'%' "
 				+ " AND REGEXP_LIKE(oc.수강요일, ?)"
 				+ "order by oc.개설코드, oc.강좌시작일, ei.회차";
-		//				+ "trim(oc.수강요일) LIKE ('%'||?||'%')";
-
+		
 		ArrayList<OpenClass> selectAList = null;
 		OpenClass openClass = null;
 		String seldayList = "";
@@ -229,7 +231,6 @@ public class OpenClassDao {
 					seldayList += "|";
 				}
 			}
-			System.out.println(seldayList);
 
 			psmt.setString(3, seldayList);
 
@@ -269,19 +270,8 @@ public class OpenClassDao {
 	}
 
 
-	//텍스트가 있는 경우
-	//	public ArrayList<OpenClass> selectSearchByText(String textCN){
-	//		
-	//	}
-	//	
-	//	
-	//	//수강요일, 텍스트 모두 있는 경우
-	//	public ArrayList<OpenClass> selectSearchByAll(String textCN){
-	//		
-	//	}
-
-	//텍스트가 있는 경우
-		public ArrayList<OpenClass> selectSearchByText(String centerName, String classSep, String textCN){
+	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+텍스트가 있는 경우
+	public ArrayList<OpenClass> selectSearchByText(String centerName, String classSep, String textCN){
 			String sql =  " select distinct c.강좌명, c.강좌분류, c.정원, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 					+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "
 					+ " where oc.강좌코드 = c.강좌코드 "
@@ -296,11 +286,14 @@ public class OpenClassDao {
 			
 			try {
 				connect();
+				
 				selectByTextList = new ArrayList<OpenClass>();
+				
 				psmt = conn.prepareStatement(sql);
 				psmt.setString(1, centerName);
 				psmt.setString(2, classSep);
 				psmt.setString(3, textCN);
+				
 				rs = psmt.executeQuery();
 				
 				while(rs.next()) {
@@ -331,7 +324,7 @@ public class OpenClassDao {
 		}
 	
 	
-	//수강요일, 텍스트 모두 있는 경우
+	//강좌조회시 사용)강좌정보를 출력하는 메소드 :: 기본 값(센터명, 강좌분류)+수강요일+텍스트가 모두 있는 경우
 	public ArrayList<OpenClass> selectSearchByAll(String centerName, String classSep, String[] array, String textCN){
 		String sql = " select c.강좌코드, c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ei.이용시작시간, ei.이용종료시간, ei.회차 "
 				+ "	from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei "

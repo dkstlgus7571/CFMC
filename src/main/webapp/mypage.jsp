@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="data.dao.MemberInfoDao" %>
-<%@ page import = "data.dto.MemberInfo"%>
-<%@ page import = "data.dto.ClassReg"%>
-<%@ page import = "data.dto.CenterRent"%>
+<%@ page import="data.dao.*" %>
+<%@ page import = "data.dto.*"%>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import ="java.util.ArrayList" %>
+<%@ page import ="java.util.*" %>
 <jsp:useBean id="cr" class="data.dto.ClassReg" scope="page"/>
 <% request.setCharacterEncoding("UTF-8"); %>
 <jsp:useBean id="user" class="data.dto.MemberInfo" scope="page" />
@@ -13,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>JSP 게시판 웹 사이트</title>
+<title>마이페이지</title>
 
 </head>
 <body>

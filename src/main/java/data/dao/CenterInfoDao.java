@@ -64,7 +64,6 @@ public class CenterInfoDao {
 
 	//제이슨파싱
 	public static String getCenterInfo() { 
-
 		String jsonStr = "";
 
 		try {
@@ -81,7 +80,6 @@ public class CenterInfoDao {
 			System.out.println("Response code: " + conn.getResponseCode());
 			BufferedReader rd;
 			if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-
 				rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 			} else {
 				rd = new BufferedReader(new InputStreamReader(conn.getErrorStream(), "UTF-8"));
@@ -104,7 +102,7 @@ public class CenterInfoDao {
 		return jsonStr;
 	}
 
-	
+	//파싱리스트
 	public ArrayList<CenterInfo> parsingList() {
 		String jsonCenter = getCenterInfo();
 		ArrayList<CenterInfo> centerInfoList = null;
@@ -139,10 +137,10 @@ public class CenterInfoDao {
 	}
 
 
-	//select name for p_centerinfo
+	//select name for p_centerinfo -> 시설명칭이 중복되지 않고 들어옴
 	public ArrayList<CenterInfo> selectCenternameList(){
 		String ctInfoListSql =  "select distinct 시설명칭 from p_centerinfo where 대관가능여부 = '가능'  order by 시설명칭 ";
-		
+
 		ArrayList<CenterInfo> selectCenterInfoList = null;
 
 		try {
@@ -152,11 +150,11 @@ public class CenterInfoDao {
 			rs = psmt.executeQuery();
 
 			selectCenterInfoList = new ArrayList<CenterInfo>();
-			
+
 			while(rs.next()) {
-				CenterInfo centerInfo = new CenterInfo();;
+				CenterInfo centerInfo = new CenterInfo();
 				centerInfo.setCt_name(rs.getString("시설명칭"));
-			System.out.println(centerInfo.getCt_address());
+				System.out.println(centerInfo.getCt_address());
 				selectCenterInfoList.add(centerInfo);
 			}
 
@@ -169,7 +167,7 @@ public class CenterInfoDao {
 		return selectCenterInfoList;
 	}	
 
-
+	//시설명칭과 주요시설에 맞게 세부시설이 들어옴
 	public ArrayList<CenterInfo> selectCenterInfoList(){
 		String ctInfoListSql =  "select distinct 시설명칭, 주요시설,세부시설, 시설코드 from p_centerinfo where 대관가능여부 = '가능'  order by 시설코드";
 		ArrayList<CenterInfo> selecCenterInfoList = null;
@@ -183,7 +181,7 @@ public class CenterInfoDao {
 
 			selecCenterInfoList = new ArrayList<CenterInfo>();
 			while(rs.next()) {
-				CenterInfo centerInfo = new CenterInfo();;
+				CenterInfo centerInfo = new CenterInfo();
 				centerInfo.setCt_name(rs.getString("시설명칭"));
 				centerInfo.setCt_facName(rs.getString("주요시설"));
 				centerInfo.setCt_facKind(rs.getString("세부시설"));
@@ -198,9 +196,9 @@ public class CenterInfoDao {
 		}
 		return selecCenterInfoList;
 	}	
-	
-	
-	//select name, fcname to p_centerinfo 
+
+
+	//select name, fcname to p_centerinfo -> 시설명칭에 따른 주요시설이 들어옴
 	public ArrayList<CenterInfo> selectCenterfcNameList(){
 		String ctInfoListSql =  "select distinct 시설명칭, 주요시설 from p_centerinfo where 대관가능여부 = '가능' order by 시설명칭, 주요시설";
 		ArrayList<CenterInfo> selecCenterInfoList = null;
@@ -214,7 +212,7 @@ public class CenterInfoDao {
 
 			selecCenterInfoList = new ArrayList<CenterInfo>();
 			while(rs.next()) {
-				CenterInfo centerInfo = new CenterInfo();;
+				CenterInfo centerInfo = new CenterInfo();
 				centerInfo.setCt_name(rs.getString("시설명칭"));
 				centerInfo.setCt_facName(rs.getString("주요시설"));
 				selecCenterInfoList.add(centerInfo);
@@ -230,7 +228,7 @@ public class CenterInfoDao {
 	}	
 
 
-	//insert centerinfo to p_centerinfo
+	//insert centerinfo to p_centerinfo -> P_CENTERINFO에 데이터를 저장하기 위한 쿼리문
 	public void insertCenterInfo(CenterInfo ci) {
 		String sqlQuery = "INSERT INTO p_centerinfo VALUES(CONCAT('CT', centerinfoSEQ.nextVal), ?, ?, ?, ?, ?)";
 

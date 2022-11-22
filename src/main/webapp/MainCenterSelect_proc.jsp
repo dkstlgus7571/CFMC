@@ -3,12 +3,8 @@
 <% request.setCharacterEncoding("UTF-8");%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.time.*"%>
-<%@page import="data.dao.ClassInfoDao"%>
-<%@page import="data.dao.CenterInfoDao"%>
-<%@page import="data.dto.ClassInfo"%>
-<%@page import="data.dto.CenterInfo"%>
-<%@page import="data.dto.OpenCenter"%>
-<%@page import="data.dao.OpenCenterDao"%>
+<%@page import="data.dao.*"%>
+<%@page import="data.dto.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +16,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="CFMCMain.css">
 <meta charset="UTF-8">
-<title>조회완료 페이지</title>
+<title>시설 조회 완료</title>
 </head>
 <body>
 	<!-- JavaScript Bundle with Popper -->
@@ -44,9 +40,9 @@
 	OpenCenter openCenter = new OpenCenter(centerName, facilityName, facilityKind, cenDate);
 	
 	OpenCenterDao openCenterDao = new OpenCenterDao();
-	
 	ArrayList<OpenCenter> openCenterList = new ArrayList<OpenCenter>();
-	openCenterList = openCenterDao.printSelectCenterInfo(openCenter);
+	
+	openCenterList = openCenterDao.printSelectCenterInfo(centerName, facilityName, facilityKind, cenDate.toString());
 	%>
 	<jsp:include page="CFMCMain.jsp" />
 
@@ -80,14 +76,11 @@
 					<th scope="row"><input type="checkBox" name="infoAll"
 						id="infoAll" value="<%=dateNEpi%>" onClick='checkOnlyOne(this)'>
 					</th>
-					<th scope="row"><%=openCenter.getCt_name()%></th>
-					<td><%=openCenterList.get(i).ct_facName %></td>
-					<td><%=openCenterList.get(i).ct_facKind %></td>
+					<th scope="row"><%=centerName%></th>
+					<td><%=facilityName%></td>
+					<td><%=facilityKind%></td>
 					<td><%=openCenterList.get(i).oct_avaPeri %></td>
-					<td><%=openCenterList.get(i).ep_useStart %> ~ <%=openCenterList.get(i).ep_useEnd %>
-					</td>
-					<td><%=openCenterList.get(i).ct_Ava %></td>
-					<!--예약현황(근데 조회되는시간만 띄울 거면... 필요없지 않나?? 다 y로 나올텐데)-->
+					<td><%=openCenterList.get(i).ep_useStart %> ~ <%=openCenterList.get(i).ep_useEnd %></td>
 				</tr>
 				<%	
 						}
@@ -110,13 +103,14 @@
 	<% }else{ //다시 조회페이지로 이동하기
 		%>
 	<script>
-		alert("예약가능한 시간이 없습니다!");
+		alert("예약가능한 시간이 없습니다! 다시 선택해주세요.");
 		location.href="CFMCMain.jsp";
 		</script>
 	<%	}%>
 
 
 	<script>
+	//예약하기 버튼 이벤트리스너 - 클릭시 체크된 박스의 VALUE값이 저장되고, 예약폼으로 넘어감
 	document.getElementById('revCenterBtn').addEventListener('click', (e)=>{
 	       e.preventDefault();
 	       
@@ -145,7 +139,7 @@
 	});
 	
 	
-		function checkOnlyOne(element) { //체크박스 중복 막아둠(라디오박스!)
+		function checkOnlyOne(element) { //체크박스 중복 막아둠(체크박스!)
 		  
 		  const checkboxes 
 		      = document.getElementsByName("infoAll");
