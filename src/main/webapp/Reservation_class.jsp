@@ -29,7 +29,6 @@
 		crossorigin="anonymous"></script>
 	<% 
    int classCode = Integer.parseInt(request.getParameter("clsctName").toString());
-	out.println(classCode);
  	OpenClass openClass = new OpenClass();
  	openClass.setOcCode(classCode);
  	
