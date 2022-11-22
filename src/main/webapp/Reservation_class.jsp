@@ -28,7 +28,8 @@
 		integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
 		crossorigin="anonymous"></script>
 	<% 
-   int classCode = Integer.parseInt(request.getParameter("clsctName"));
+   int classCode = Integer.parseInt(request.getParameter("clsctName").toString());
+	out.println(classCode);
  	OpenClass openClass = new OpenClass();
  	openClass.setOcCode(classCode);
  	
