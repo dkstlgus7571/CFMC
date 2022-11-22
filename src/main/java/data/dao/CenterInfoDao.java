@@ -154,7 +154,7 @@ public class CenterInfoDao {
 			while(rs.next()) {
 				CenterInfo centerInfo = new CenterInfo();
 				centerInfo.setCt_name(rs.getString("시설명칭"));
-				System.out.println(centerInfo.getCt_address());
+//				System.out.println(centerInfo.getCt_address());
 				selectCenterInfoList.add(centerInfo);
 			}
 
@@ -245,7 +245,7 @@ public class CenterInfoDao {
 			int resultCnt = psmt.executeUpdate(); 
 			// executeQuery -> Select -> ResultSet
 			// executeUpdate -> insert, delete, update -> int
-			System.out.println(resultCnt);
+//			System.out.println(resultCnt);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
