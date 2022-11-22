@@ -16,7 +16,6 @@ import org.json.simple.parser.ParseException;
 
 import data.dto.OpenClass;
 
-
 public class OpenClassDao {
 	Connection conn = null;
 	PreparedStatement psmt = null;
@@ -70,7 +69,6 @@ public class OpenClassDao {
 				OpenClass openClass = new OpenClass();;
 				openClass.setCt_name(rs.getString("시설명칭"));
 				selectCtNameOpenclassList.add(openClass);
-				System.out.println(openClass.ct_name);
 			}
 
 		} catch (Exception e) {
@@ -389,5 +387,67 @@ public class OpenClassDao {
 		}catch(Exception e){
 			e.printStackTrace();
 		}return selectByAll;
+	}
+	
+	public ArrayList<OpenClass> openclassAllList(OpenClass oc){
+		String openclassALlSql = " select distinct c.강좌명, c.강좌분류, c.정원, oc.개설코드, oc.신청인원, oc.수강요일, oc.접수시작일, oc.접수마감일, "
+				+ " oc.강좌시작일, oc.강좌종료일, ci.시설코드, ci.시설명칭, ci.주요시설, ci.세부시설, ci.주소, NVL(c.준비물,'-') as\"준비물\",  "
+				+ " ei.이용시작시간, ei.이용종료시간, ei.회차, tt.강사코드, tt.이름, NVL(c.강좌소개, '-') as\"강좌소개\", oc.강좌코드"
+				+ " from p_openClass oc, p_classinfo c, p_centerinfo ci, p_epiInfo ei, p_tutorinfo tt "
+				+ " where oc.강좌코드 = c.강좌코드 "
+				+ " and oc.시설코드 = ci.시설코드 "
+				+ " and oc.회차 = ei.회차 "
+				+ " and oc.강사코드 = tt.강사코드 "
+				+ " and oc.개설코드 = ? "
+				+ " order by oc.개설코드, oc.강좌시작일, ei.회차";
+
+		ArrayList<OpenClass> classAllList = null;
+		OpenClass openClass = null;
+
+		try {
+			connect();
+
+			psmt = conn.prepareStatement(openclassALlSql);
+
+			psmt.setInt(1, oc.ocCode);
+
+			rs = psmt.executeQuery();
+
+			classAllList = new ArrayList<OpenClass>();
+			
+			while(rs.next()) {
+				openClass = new OpenClass();	
+				openClass.setC_name(rs.getString("강좌명"));
+				openClass.setC_group(rs.getString("강좌분류"));
+				openClass.setC_personnel(rs.getInt("정원"));
+				openClass.setOcCode(rs.getInt("개설코드"));
+				openClass.setOc_appliNum(rs.getInt("신청인원"));
+				openClass.setOc_day(rs.getString("수강요일"));
+				openClass.setOc_acceptStart((rs.getDate("접수시작일")).toLocalDate());
+				openClass.setOc_acceptEnd((rs.getDate("접수마감일")).toLocalDate());
+				openClass.setOc_classStart((rs.getDate("강좌시작일")).toLocalDate());
+				openClass.setOc_classEnd((rs.getDate("강좌종료일")).toLocalDate());
+				openClass.setCt_code(rs.getString("시설코드"));
+				openClass.setCt_name(rs.getString("시설명칭"));
+				openClass.setEp_useStart(rs.getString("이용시작시간")); //강의 시작시간
+				openClass.setEp_useEnd(rs.getString("이용종료시간")); 
+				openClass.setCt_facName(rs.getString("주요시설")); 
+				openClass.setCt_facKind(rs.getString("세부시설"));
+				openClass.setCt_address(rs.getString("주소"));
+				openClass.setC_material(rs.getString("준비물"));
+				openClass.setT_name(rs.getString("이름"));
+				openClass.setT_code(rs.getString("강사코드"));
+				openClass.setC_intro(rs.getString("강좌소개"));
+				openClass.setOc_cCode(rs.getString("강좌코드"));
+				classAllList.add(openClass);
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			disConnect();
+		}
+		return classAllList;
 	}
 }

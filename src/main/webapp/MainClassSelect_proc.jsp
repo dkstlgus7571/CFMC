@@ -109,6 +109,7 @@
 		</table>
 			<form name="chooseRegCls" id="chooseRegCls">
 				<input type="hidden" name="clsctName"> 
+
 				<button id="regClsBtn" type="submit">예약하기</button>
 		</form>
 	</div>
@@ -137,11 +138,11 @@
 	       selectedCb = selectedEls.value;
 
 	     	let form = document.chooseRegCls;
-	     
-	     	form.clsctName.value = selectedCb;
+	     	
+	     	form.clsctName.value = selectedCb.toString();
 
 	     	console.log("예약폼으로 넘어갑니다!");
-	     	form.action="CFMCMain_Select.jsp";
+	     	form.action="Reservation_class.jsp";
 	    	form.method="post";
 	    	form.submit();
 	       }

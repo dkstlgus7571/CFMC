@@ -128,7 +128,7 @@
 
 	     	let form = document.chooseRevCt;
 	     	
-	     	form.avaPeri.value = selectedArr.substring(0,10).toString();
+	     	form.avaPeriod.value = selectedArr.substring(0,10);
 	     	form.epi.value = selectedArr.substring(10);
 
 	     	console.log("예약폼으로 넘어갑니다!");
